@@ -1,11 +1,17 @@
-import Image from "next/image";
+// page.tsx
 import HomeComp from "../components/Home";
+import Gallery from "../components/Gallery";
 
 export default function Home() {
   return (
-    <div className="flex flex-col min-h-screen bg-black font-sans">
-      <main className="flex flex-1 w-full flex-col">
-        <HomeComp />
+    <div className="min-h-screen flex flex-col bg-black font-sans">
+      <main className="snap-container">
+        <section id="home" className="snap-section">
+          <HomeComp />
+        </section>
+        <section id="gallery" className="snap-section">
+          <Gallery />
+        </section>
       </main>
     </div>
   );

@@ -24,9 +24,9 @@ export default function HomeComp() {
         that are <strong>thoughtful</strong>, functional and visually striking.
       </p>
 
-      <button className={`${styles.ctaBtn} ${styles.animate}`}>
+      <a href="#gallery" className={`${styles.ctaBtn} ${styles.animate}`}>
         EXPLORE MY WORK <span className={styles.arrow}>↗</span>
-      </button>
+      </a>
 
       <div className={`${styles.categories} ${styles.animate}`}>
         {[

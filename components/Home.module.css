@@ -85,7 +85,7 @@
   background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
   filter: blur(40px);
  margin-bottom: -5rem;
-  margin-left: -1.2rem;
+  margin-left: -3rem;
   opacity: 0;
 }
 .glowOrb.animate {

@@ -1,7 +1,8 @@
+/* globals.css - Updated for proper scrolling */
 @import "tailwindcss";
 
 :root {
-   --background: #000000;
+  --background: #000000;
   --foreground: #ededed;
   --CalSans: "CalSans", sans-serif;
   --Boldye: "Boldye", sans-serif;
@@ -43,9 +44,48 @@
   font-style: normal;
 }
 
-
 body {
- background: #000;
+  background: #000;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  overflow: auto;
+  height: 100%;
+  touch-action: auto;
+}
+
+html {
+  height: 100%;
+  overflow: auto;
+  scroll-behavior: smooth;
+}
+
+/* ─── Snap scroll container - FIXED ─── */
+.snap-container {
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* ─── Hero section — exact viewport height ─── */
+.snap-section {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ─── Gallery section — auto height (no constraints) ─── */
+.snap-section:last-child {
+  /* Remove min-height constraint - let content determine height */
+  min-height: auto;
+  /* Keep snap alignment at start only */
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  /* Ensure all content is visible */
+  height: auto;
+  overflow: visible;
 }
