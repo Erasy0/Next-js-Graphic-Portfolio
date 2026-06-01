@@ -1,4 +1,4 @@
-/* Gallery.module.css - Premium Compact Coverflow Gallery - LARGER MODAL + BLUR */
+/* Gallery.module.css - Premium Coverflow Gallery — Full Mobile Responsive */
 
 /* ─── CSS Custom Properties ─────────────────────────────────────────────────── */
 @property --shimmer-angle {
@@ -15,6 +15,7 @@
   align-items: center;
   width: 100%;
   min-height: 100vh;
+  /* Comfortable vertical padding — reduces on mobile */
   padding: 1rem 1rem 0.5rem;
   background: #000000;
   background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 70%);
@@ -22,12 +23,7 @@
   overflow-x: hidden;
 }
 
-/* Remove the large spacer pseudo-element */
-.gallerySection::before {
-  display: none;
-}
-
-/* ─── Top Bar - Category button now on left, label on right ────────────────── */
+/* ─── Top Bar ────────────────────────────────────────────────────────────────── */
 .topBar {
   width: 100%;
   max-width: 1400px;
@@ -35,25 +31,10 @@
   align-items: center;
   justify-content: space-between;
   margin-bottom: 0.75rem;
-  padding: 0 1.5rem;
+  padding: 0 1rem;
   position: relative;
   z-index: 100;
-}
-
-.activeLabel {
-  font-size: 0.65rem;
-  letter-spacing: 0.3em;
-  color: rgba(255, 255, 255, 0.4);
-  text-transform: uppercase;
-  font-weight: 400;
-  background: rgba(255,255,255,0.03);
-  padding: 0.35rem 1rem;
-  border-radius: 100px;
-  backdrop-filter: blur(8px);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 300px;
+  box-sizing: border-box;
 }
 
 /* ─── Category Dropdown ─────────────────────────────────────────────────────── */
@@ -78,9 +59,9 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
   font-family: inherit;
+  /* Prevent text wrap on mobile */
+  white-space: nowrap;
 }
-
-/* REMOVED: .scrollTopWrap and .scrollTopLink - Back to top button removed */
 
 .catBtn:hover {
   border-color: rgba(255, 255, 255, 0.3);
@@ -95,8 +76,9 @@
   background: rgba(30, 30, 30, 0.95) !important;
 }
 
-.catBtnIcon { font-size: 0.75rem; opacity: 0.7; }
+.catBtnIcon  { font-size: 0.75rem; opacity: 0.7; }
 .catBtnChevron { font-size: 0.5rem; opacity: 0.5; }
+.catBtnLabel { /* hidden on very small screens via breakpoint below */ }
 
 .catBadge {
   position: absolute;
@@ -115,10 +97,11 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.3);
 }
 
+/* Dropdown opens upward on small screens to avoid overflow */
 .dropdown {
   position: absolute;
   top: calc(100% + 10px);
-  right: 0;
+  left: 0;
   min-width: 240px;
   background: rgba(12, 12, 12, 0.98);
   backdrop-filter: blur(20px);
@@ -127,11 +110,13 @@
   padding: 6px;
   animation: dropIn 0.2s ease;
   box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  /* Ensure it doesn't go off-screen right edge */
+  max-width: min(240px, 90vw);
 }
 
 @keyframes dropIn {
   from { opacity: 0; transform: translateY(-8px); }
-  to { opacity: 1; transform: translateY(0); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 .dropItem {
@@ -148,865 +133,31 @@
   cursor: pointer;
   border-radius: 10px;
   transition: all 0.15s ease;
-}
-.dropItem:hover {
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.9);
-  transform: translateX(4px);
+  text-align: left;
+  /* Make tap targets bigger on mobile */
+  min-height: 36px;
 }
 
-.dropItemActive { 
+.dropItem:hover,
+.dropItem:active {
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.dropItemActive {
   color: #ffffff;
   background: rgba(255, 255, 255, 0.05);
 }
 
-.dropIcon { font-size: 0.7rem; width: 20px; text-align: center; flex-shrink: 0; }
+.dropIcon  { font-size: 0.7rem; width: 20px; text-align: center; flex-shrink: 0; }
 .dropCheck { margin-left: auto; font-size: 0.6rem; color: #ffffff; opacity: 0.8; }
-.dropDivider { height: 1px; background: rgba(255, 255, 255, 0.08); margin: 4px 4px; }
-
-/* ─── 3D Stage - Core Perspective Container ─────────────────────────────────── */
-.stage {
-  width: 100%;
-  max-width: 1100px;
-  height: 420px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: grab;
-  touch-action: pan-y pinch-zoom;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  
-  /* CRITICAL: Perspective creates the 3D space for all cards */
-  perspective: 1000px;
-  perspective-origin: 50% 45%;
-  
-  overflow: visible;
-  margin: 0 auto;
-  margin-top: 0.25rem;
-  margin-bottom: 0.25rem;
-}
-
-.stage:active {
-  cursor: grabbing;
-}
-
-/* ─── Ambient Glow - Dynamic Lighting Effect ───────────────────────────────── */
-.ambientGlow {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 400px;
-  height: 200px;
-  border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.12;
-  pointer-events: none;
-  transition: background 0.5s ease;
-  z-index: 0;
-}
-
-/* ─── Coverflow Track - 3D Space Container ─────────────────────────────────── */
-.coverflowTrack {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-/* ─── Reflection Strip - Elegant Floor Line ────────────────────────────────── */
-.reflectionStrip {
-  position: absolute;
-  bottom: 15px;
-  left: 15%;
-  right: 15%;
+.dropDivider {
   height: 1px;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255, 255, 255, 0.08) 20%,
-    rgba(255, 255, 255, 0.15) 50%,
-    rgba(255, 255, 255, 0.08) 80%,
-    transparent
-  );
-  pointer-events: none;
-  z-index: 1;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 4px 4px;
 }
 
-/* ─── Coverflow Card - Premium Design (NO BLEEDING) ─────────────────────────── */
-.cfCard {
-  position: absolute;
-  
-  /* CRITICAL: overflow hidden prevents image bleeding */
-  overflow: hidden;
-  border-radius: 14px;
-  
-  cursor: pointer;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-  
-  /* GPU-optimized transitions */
-  transition: 
-    transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-    opacity 0.35s ease;
-  
-  will-change: transform, opacity;
-  isolation: isolate;
-  
-  /* Premium shadow system */
-  box-shadow:
-    0 0 0 1px rgba(255, 255, 255, 0.1),
-    0 20px 35px -12px rgba(0, 0, 0, 0.5),
-    0 3px 10px rgba(0, 0, 0, 0.3);
-  
-  transform-style: preserve-3d;
-}
-
-/* Active Card Premium Styling */
-.cfCardActive {
-  box-shadow:
-    0 0 0 1.5px rgba(255, 255, 255, 0.2),
-    0 25px 50px -15px rgba(0, 0, 0, 0.6),
-    0 6px 15px rgba(0, 0, 0, 0.4);
-  z-index: 20;
-}
-
-.cfCardActive:hover {
-  transform: translateY(-3px) !important;
-  transition: transform 0.3s ease !important;
-  box-shadow:
-    0 0 0 1.5px rgba(255, 255, 255, 0.3),
-    0 35px 60px -15px rgba(0, 0, 0, 0.7);
-}
-
-/* ─── CARD IMAGE PREVIEW - Cropped to entice clicking ───────────────────────── */
-.cfCardImg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  /* object-fit: cover creates a cropped preview - users won't see the full image */
-  object-fit: cover;
-  /* Significant zoom to crop the image and show it's a preview */
-  transform: scale(1.25);
-  object-position: center;
-  pointer-events: none;
-  user-select: none;
-  display: block;
-  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  will-change: transform;
-  /* Subtle desaturation to indicate it's a preview */
-  filter: brightness(0.92) saturate(0.95);
-}
-
-/* On hover, show a bit more of the image but still cropped */
-.cfCardActive:hover .cfCardImg {
-  transform: scale(1.1);
-}
-
-/* Add a "click to view full image" indicator on active card */
-.cfCardActive::after {
-  content: "🔍 VIEW FULL";
-  position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 0.55rem;
-  color: rgba(255, 255, 255, 0.7);
-  background: rgba(0, 0, 0, 0.6);
-  padding: 4px 10px;
-  border-radius: 20px;
-  z-index: 15;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  backdrop-filter: blur(4px);
-  white-space: nowrap;
-}
-
-.cfCardActive:hover::after {
-  opacity: 1;
-}
-
-/* Premium Gradient Overlay - Enhanced for preview indication */
-.cfCardOverlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 12px 14px 14px;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.95) 0%,
-    rgba(0, 0, 0, 0.5) 30%,
-    transparent 60%,
-    rgba(0, 0, 0, 0.2) 100%
-  );
-  border-radius: 14px;
-  pointer-events: none;
-  z-index: 2;
-  transition: background 0.3s ease;
-}
-
-.cfCardActive:hover .cfCardOverlay {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.98) 0%,
-    rgba(0, 0, 0, 0.6) 35%,
-    transparent 65%
-  );
-}
-
-.cfCardCategory {
-  display: block;
-  font-size: 0.5rem;
-  letter-spacing: 0.18em;
-  margin-bottom: 3px;
-  opacity: 0.85;
-  font-weight: 500;
-  text-transform: uppercase;
-}
-
-.cfCardTitle {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 2px;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.cfCardSub {
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  font-weight: 400;
-}
-
-.cfCardCta {
-  display: block;
-  font-size: 0.55rem;
-  color: rgba(255, 255, 255, 0.6);
-  margin-top: 5px;
-  letter-spacing: 0.08em;
-  font-weight: 500;
-  opacity: 0;
-  transform: translateX(-4px);
-  transition: opacity 0.2s ease 0.05s, transform 0.2s ease 0.05s;
-}
-
-.cfCardActive:hover .cfCardCta {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-/* Preview card indicator - shows there's a full image to view */
-.cfCardActive .cfCardOverlay::before {
-  content: "✨";
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  font-size: 0.7rem;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  pointer-events: none;
-}
-
-.cfCardActive:hover .cfCardOverlay::before {
-  opacity: 0.8;
-}
-
-/* ─── Shimmer Ring - Active Card Premium Effect ────────────────────────────── */
-.shimmerRing {
-  position: absolute;
-  inset: -1.5px;
-  border-radius: 15.5px;
-  background: conic-gradient(
-    from var(--shimmer-angle, 0deg),
-    transparent 0deg,
-    transparent 70deg,
-    rgba(255, 255, 255, 0.15) 75deg,
-    rgba(255, 255, 255, 0.7) 85deg,
-    rgba(255, 255, 255, 0.15) 95deg,
-    transparent 100deg,
-    transparent 360deg
-  );
-  z-index: 10;
-  pointer-events: none;
-  
-  /* Mask to show only the border */
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  padding: 1.5px;
-  
-  animation: shimmerSpin 4s linear infinite;
-}
-
-@keyframes shimmerSpin {
-  from { --shimmer-angle: 0deg; }
-  to { --shimmer-angle: 360deg; }
-}
-
-/* ─── Floor Reflection - Realistic Mirror Effect ───────────────────────────── */
-.cfCardReflection {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 100%;
-  height: 60px;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: -1;
-  border-radius: 0 0 14px 14px;
-  opacity: 0.35;
-  transition: opacity 0.3s ease;
-  
-  /* Gradient fade for realistic reflection falloff */
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 90%);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 90%);
-}
-
-.cfCardActive .cfCardReflection {
-  opacity: 0.5;
-}
-
-.cfCardReflectionImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: bottom;
-  transform: scaleY(-1);
-  pointer-events: none;
-  display: block;
-  filter: blur(1.5px) brightness(0.8) saturate(0.7);
-}
-
-/* ─── Info Panel - Compact Dynamic Project Details - REDUCED SPACING ───────── */
-.infoPanel {
-  margin-top: 0.75rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-  min-height: 55px;
-  text-align: center;
-  animation: infoPanelIn 0.4s ease forwards;
-  position: relative;
-  z-index: 10;
-}
-
-@keyframes infoPanelIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.infoCat {
-  font-size: 0.55rem;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  background: rgba(255,255,255,0.03);
-  padding: 0.15rem 0.8rem;
-  border-radius: 100px;
-  font-weight: 500;
-}
-
-.infoTitle {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: #ffffff;
-  letter-spacing: -0.02em;
-  margin: 0;
-  background: linear-gradient(135deg, #ffffff, rgba(255,255,255,0.7));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-}
-
-.infoSub {
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.4);
-  letter-spacing: 0.08em;
-  font-weight: 400;
-}
-
-/* ─── Navigation Controls - REDUCED SPACING ────────────────────────────────── */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 0.75rem;
-  margin-bottom: 0.25rem;
-  position: relative;
-  z-index: 10;
-}
-
-.navArrow {
-  background: rgba(20, 20, 20, 0.6);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.5);
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 0.85rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-.navArrow:hover {
-  border-color: rgba(255, 255, 255, 0.35);
-  color: rgba(255, 255, 255, 0.9);
-  background: rgba(40, 40, 40, 0.8);
-  transform: scale(1.05);
-}
-
-.navArrowOverlay {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(20, 20, 20, 0.5);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.6);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 1.1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 20;
-  opacity: 0;
-  transition: opacity 0.3s ease, transform 0.2s ease;
-}
-
-.stage:hover .navArrowOverlay {
-  opacity: 1;
-}
-
-.navArrowOverlay:hover {
-  background: rgba(40, 40, 40, 0.8);
-  color: rgba(255, 255, 255, 0.95);
-  transform: translateY(-50%) scale(1.05);
-}
-
-.navArrowLeft {
-  left: 20px;
-}
-
-.navArrowRight {
-  right: 20px;
-}
-
-.dots {
-  display: flex;
-  gap: 5px;
-  align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  max-width: 400px;
-}
-
-.dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.25);
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: all 0.2s ease;
-}
-
-.dotActive {
-  width: 16px;
-  border-radius: 8px;
-  background: #ffffff !important;
-}
-
-.dot:hover {
-  background: rgba(255, 255, 255, 0.6);
-  transform: scale(1.2);
-}
-
-.dragHint {
-  font-size: 0.5rem;
-  letter-spacing: 0.25em;
-  color: rgba(255, 255, 255, 0.15);
-  margin-top: 0.5rem;
-  margin-bottom: 0.25rem;
-  text-transform: uppercase;
-  font-weight: 400;
-}
-
-/* ══════════════════════════════════════════════════════════════════════════════
-   MODAL - Premium Glassmorphism - LARGER IMAGE + STRONG BACKGROUND BLUR
-══════════════════════════════════════════════════════════════════════════════ */
-
-/* When modal is open, the backdrop handles the blur - this creates the blurred background effect */
-.modalBackdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  /* Strong dark background with heavy blur - creates the blurred background effect */
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(20px);
-  padding: 1rem;
-  pointer-events: auto;
-  animation: backdropIn 0.3s ease forwards;
-}
-
-@keyframes backdropIn {
-  from { 
-    opacity: 0; 
-    backdrop-filter: blur(0px);
-    background: rgba(0, 0, 0, 0);
-  }
-  to { 
-    opacity: 1; 
-    backdrop-filter: blur(20px);
-    background: rgba(0, 0, 0, 0.85);
-  }
-}
-
-.modal {
-  position: relative;
-  background: rgba(10, 10, 15, 0.95);
-  backdrop-filter: blur(40px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-top-color: rgba(255, 255, 255, 0.3);
-  border-radius: 32px;
-  overflow: hidden;
-  /* LARGER MODAL - increased max-width */
-  max-width: 1000px;
-  width: 95%;
-  /* LARGER MODAL - increased max-height */
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 
-    0 0 0 0.5px rgba(255, 255, 255, 0.1),
-    0 30px 60px -15px rgba(0, 0, 0, 0.5),
-    0 100px 150px -40px rgba(0, 0, 0, 0.7);
-  animation: modalIn 0.4s cubic-bezier(0.2, 1, 0.3, 1) forwards;
-}
-
-@keyframes modalIn {
-  from { opacity: 0; transform: scale(0.95) translateY(20px); }
-  to { opacity: 1; transform: scale(1) translateY(0); }
-}
-
-.closeBtn {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  z-index: 20;
-  background: rgba(0, 0, 0, 0.6);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  color: rgba(255, 255, 255, 0.9);
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  font-size: 0.9rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-}
-
-.closeBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  transform: rotate(90deg) scale(1.05);
-  border-color: rgba(255, 255, 255, 0.5);
-}
-
-.modalImgWrap {
-  width: 100%;
-  /* REDUCED padding to give more space to the image */
-  padding: 1rem 1rem 0.5rem 1rem;
-  box-sizing: border-box;
-  background: rgba(0, 0, 0, 0.2);
-  position: relative;
-}
-
-/* MODAL IMAGE STRIP - NO SCROLLBAR VISIBLE */
-.modalImgStrip {
-  display: flex;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  border-radius: 20px;
-  cursor: grab;
-  user-select: none;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.15);
-  /* LARGER minimum height */
-  min-height: 420px;
-}
-
-.modalImgStrip::-webkit-scrollbar {
-  display: none;
-}
-
-.modalImgStrip:active {
-  cursor: grabbing;
-}
-
-/* FULL IMAGE - LARGER and perfectly fitted */
-.modalImg {
-  flex: 0 0 100%;
-  width: 100%;
-  height: auto;
-  /* LARGER max height - takes up more space in modal */
-  max-height: 65vh;
-  /* CRITICAL: contain shows the COMPLETE uncropped image */
-  object-fit: contain;
-  scroll-snap-align: start;
-  display: block;
-  pointer-events: none;
-  border-radius: 16px;
-  background: #0a0a0a;
-  /* REDUCED padding for larger image area */
-  padding: 0.25rem;
-  box-sizing: border-box;
-}
-
-/* Image counter badge - repositioned for larger modal */
-.modalImageCounter {
-  position: absolute;
-  bottom: 20px;
-  right: 28px;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(16px);
-  padding: 0.4rem 1rem;
-  border-radius: 30px;
-  font-size: 0.7rem;
-  font-weight: 500;
-  color: rgba(255, 255, 255, 0.95);
-  z-index: 15;
-  pointer-events: none;
-  font-family: monospace;
-  letter-spacing: 0.08em;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Swipe hint at bottom */
-.modalSwipeHint {
-  font-size: 0.55rem;
-  letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.4);
-  margin-top: 0.5rem;
-  text-transform: uppercase;
-  text-align: center;
-}
-
-.modalInfo {
-  padding: 1rem 1.5rem 1.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.modalCategory {
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  opacity: 0.8;
-}
-
-.modalTitle {
-  font-size: 1.6rem;
-  color: #ffffff;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.02em;
-}
-
-.modalSub {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.5);
-  margin: 0;
-  letter-spacing: 0.05em;
-}
-
-.modalDesc {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.7);
-  line-height: 1.6;
-  margin: 0.3rem 0 0;
-  font-weight: 400;
-}
-
-/* ─── Responsive Design for LARGER MODAL ────────────────────────────────────── */
-@media (max-width: 1024px) {
-  .modal {
-    max-width: 900px;
-  }
-  
-  .modalImgStrip {
-    min-height: 380px;
-  }
-  
-  .modalImg {
-    max-height: 60vh;
-  }
-  
-  .modalTitle { font-size: 1.4rem; }
-}
-
-@media (max-width: 768px) {
-  .modal {
-    max-width: 95%;
-    max-height: 88vh;
-  }
-  
-  .modalImgStrip {
-    min-height: 320px;
-  }
-  
-  .modalImg {
-    max-height: 55vh;
-    padding: 0.2rem;
-  }
-  
-  .modalTitle { font-size: 1.3rem; }
-  .modalInfo { padding: 0.8rem 1.2rem 1.2rem; }
-  
-  .modalImageCounter {
-    bottom: 15px;
-    right: 20px;
-    padding: 0.3rem 0.8rem;
-    font-size: 0.6rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .modalBackdrop {
-    padding: 0;
-    align-items: flex-end;
-  }
-  
-  .modal {
-    max-width: 100%;
-    border-radius: 28px 28px 0 0;
-    max-height: 90vh;
-  }
-  
-  .modal::before {
-    content: "";
-    display: block;
-    width: 40px;
-    height: 4px;
-    background: rgba(255, 255, 255, 0.3);
-    border-radius: 2px;
-    margin: 12px auto 0;
-  }
-  
-  .modalImgStrip {
-    min-height: 280px;
-  }
-  
-  .modalImg {
-    max-height: 48vh;
-    padding: 0.15rem;
-  }
-  
-  .modalTitle { font-size: 1.2rem; }
-  .modalInfo { padding: 0.7rem 1rem 1rem; }
-  
-  .closeBtn {
-    top: 12px;
-    right: 12px;
-    width: 32px;
-    height: 32px;
-    font-size: 0.8rem;
-  }
-  
-  .modalImageCounter {
-    bottom: 12px;
-    right: 15px;
-    padding: 0.25rem 0.7rem;
-    font-size: 0.55rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .modalImgStrip {
-    min-height: 240px;
-  }
-  
-  .modalImg {
-    max-height: 42vh;
-  }
-  
-  .modalTitle { font-size: 1rem; }
-  .modalSub { font-size: 0.7rem; }
-  .modalDesc { font-size: 0.75rem; }
-  
-  .modalImageCounter {
-    bottom: 10px;
-    right: 12px;
-    padding: 0.2rem 0.6rem;
-    font-size: 0.5rem;
-  }
-}
-
-/* ─── High Performance Optimizations ───────────────────────────────────────── */
-@media (prefers-reduced-motion: reduce) {
-  .cfCard,
-  .cfCardImg,
-  .ambientGlow,
-  .infoPanel,
-  .modal,
-  .modalBackdrop,
-  .shimmerRing {
-    transition: none !important;
-    animation: none !important;
-  }
-  
-  .shimmerRing {
-    display: none;
-  }
-}
-/* Add these styles to your existing CSS file */
-
-/* ─── Work Counter - Shows current/total works ─────────────────────────────── */
+/* ─── Work Counter ───────────────────────────────────────────────────────────── */
 .workCounter {
   display: flex;
   align-items: baseline;
@@ -1016,6 +167,7 @@
   border-radius: 100px;
   backdrop-filter: blur(8px);
   font-family: monospace;
+  flex-shrink: 0;
 }
 
 .workCounterCurrent {
@@ -1046,19 +198,150 @@
   font-weight: 400;
 }
 
-/* ─── Simplified Card Overlay - No text, just view indicator ───────────────── */
-.cfCardOverlay {
+/* ─── 3D Stage ───────────────────────────────────────────────────────────────── */
+.stage {
+  width: 100%;
+  max-width: 1100px;
+  /* Height is set dynamically via inline style */
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  /* Allow vertical scroll on mobile, horizontal handled by JS */
+  touch-action: pan-y;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+
+  perspective: 1000px;
+  perspective-origin: 50% 45%;
+
+  overflow: visible;
+  margin: 0 auto;
+  margin-top: 0.25rem;
+  margin-bottom: 0.25rem;
+}
+
+.stage:active {
+  cursor: grabbing;
+}
+
+/* ─── Ambient Glow ───────────────────────────────────────────────────────────── */
+.ambientGlow {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.12;
+  pointer-events: none;
+  transition: background 0.5s ease;
+  z-index: 0;
+}
+
+/* ─── Coverflow Track ────────────────────────────────────────────────────────── */
+.coverflowTrack {
   position: absolute;
   inset: 0;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
   align-items: center;
-  padding: 12px;
+  justify-content: center;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+/* ─── Reflection Strip ───────────────────────────────────────────────────────── */
+.reflectionStrip {
+  position: absolute;
+  bottom: 15px;
+  left: 15%;
+  right: 15%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.08) 20%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.08) 80%,
+    transparent
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ─── Coverflow Card ─────────────────────────────────────────────────────────── */
+.cfCard {
+  position: absolute;
+  overflow: hidden;
+  border-radius: 14px;
+  cursor: pointer;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition:
+    transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 0.35s ease;
+  will-change: transform, opacity;
+  isolation: isolate;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 20px 35px -12px rgba(0, 0, 0, 0.5),
+    0 3px 10px rgba(0, 0, 0, 0.3);
+  transform-style: preserve-3d;
+}
+
+.cfCardActive {
+  box-shadow:
+    0 0 0 1.5px rgba(255, 255, 255, 0.2),
+    0 25px 50px -15px rgba(0, 0, 0, 0.6),
+    0 6px 15px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+}
+
+/* Only apply hover lift on non-touch devices */
+@media (hover: hover) {
+  .cfCardActive:hover {
+    transform: translateY(-3px) !important;
+    transition: transform 0.3s ease !important;
+    box-shadow:
+      0 0 0 1.5px rgba(255, 255, 255, 0.3),
+      0 35px 60px -15px rgba(0, 0, 0, 0.7);
+  }
+}
+
+/* ─── Card Image ─────────────────────────────────────────────────────────────── */
+.cfCardImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.25);
+  object-position: center;
+  pointer-events: none;
+  user-select: none;
+  display: block;
+  transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  will-change: transform;
+  filter: brightness(0.92) saturate(0.95);
+}
+
+@media (hover: hover) {
+  .cfCardActive:hover .cfCardImg {
+    transform: scale(1.1);
+  }
+}
+
+/* ─── Card Overlay ───────────────────────────────────────────────────────────── */
+.cfCardOverlay {
+  position: absolute;
+  inset: 0;
   background: linear-gradient(
     to top,
-    rgba(0, 0, 0, 0.6) 0%,
-    transparent 40%
+    rgba(0, 0, 0, 0.3) 0%,
+    transparent 30%
   );
   border-radius: 14px;
   pointer-events: none;
@@ -1066,35 +349,17 @@
   transition: background 0.3s ease;
 }
 
-.cfCardActive:hover .cfCardOverlay {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.8) 0%,
-    transparent 50%
-  );
+@media (hover: hover) {
+  .cfCardActive:hover .cfCardOverlay {
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.4) 0%,
+      transparent 35%
+    );
+  }
 }
 
-.cfCardCta {
-  display: block;
-  font-size: 0.55rem;
-  color: rgba(255, 255, 255, 0.8);
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px 12px;
-  border-radius: 20px;
-  letter-spacing: 0.08em;
-  font-weight: 500;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.2s ease 0.05s, transform 0.2s ease 0.05s;
-  backdrop-filter: blur(4px);
-}
-
-.cfCardActive:hover .cfCardCta {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Update active card indicator position */
+/* VIEW FULL hint — desktop hover only */
 .cfCardActive::after {
   content: "🔍 VIEW FULL";
   position: absolute;
@@ -1116,136 +381,227 @@
   white-space: nowrap;
 }
 
-/* Remove the shimmer indicator from overlay */
-.cfCardActive .cfCardOverlay::before {
-  display: none;
-}
-
-/* Responsive adjustments for work counter */
-@media (max-width: 640px) {
-  .workCounter {
-    padding: 0.25rem 0.7rem;
-  }
-  
-  .workCounterCurrent {
-    font-size: 0.8rem;
-  }
-  
-  .workCounterSeparator {
-    font-size: 0.55rem;
-  }
-  
-  .workCounterTotal {
-    font-size: 0.7rem;
-  }
-  
-  .workCounterLabel {
-    font-size: 0.45rem;
-    margin-left: 0.25rem;
+@media (hover: hover) {
+  .cfCardActive:hover::after {
+    opacity: 1;
   }
 }
 
-@media (max-width: 480px) {
-  .workCounterCurrent {
-    font-size: 0.7rem;
-  }
-  
-  .workCounterTotal {
-    font-size: 0.6rem;
-  }
-  
-  .workCounterLabel {
-    display: none;
+/* On touch devices show a permanent subtle tap hint */
+@media (hover: none) {
+  .cfCardActive::after {
+    content: "TAP TO VIEW";
+    opacity: 0.65;
+    bottom: 10px;
+    font-size: 0.5rem;
   }
 }
-/* ─── NEW FEATURE: Thumbnail Strip Preview ──────────────────────────────────── */
-.thumbnailStrip {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 0.75rem auto 0.5rem;
-  max-width: 500px;
-  width: 100%;
+
+/* ─── Shimmer Ring ───────────────────────────────────────────────────────────── */
+.shimmerRing {
+  position: absolute;
+  inset: -1.5px;
+  border-radius: 15.5px;
+  background: conic-gradient(
+    from var(--shimmer-angle, 0deg),
+    transparent 0deg,
+    transparent 70deg,
+    rgba(255, 255, 255, 0.15) 75deg,
+    rgba(255, 255, 255, 0.7) 85deg,
+    rgba(255, 255, 255, 0.15) 95deg,
+    transparent 100deg,
+    transparent 360deg
+  );
+  z-index: 10;
+  pointer-events: none;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1.5px;
+  animation: shimmerSpin 4s linear infinite;
 }
 
-.thumbnailPrev,
-.thumbnailNext {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: rgba(20, 20, 20, 0.6);
-  backdrop-filter: blur(4px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: rgba(255, 255, 255, 0.6);
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+@keyframes shimmerSpin {
+  from { --shimmer-angle: 0deg; }
+  to   { --shimmer-angle: 360deg; }
 }
 
-.thumbnailPrev:hover,
-.thumbnailNext:hover {
-  background: rgba(40, 40, 40, 0.8);
-  color: rgba(255, 255, 255, 0.95);
-  transform: scale(1.05);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.thumbnailTrack {
-  display: flex;
-  gap: 0.5rem;
-  overflow-x: auto;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-  padding: 0.25rem 0;
-  max-width: 380px;
-}
-
-.thumbnailTrack::-webkit-scrollbar {
-  display: none;
-}
-
-.thumbnail {
-  position: relative;
-  flex-shrink: 0;
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
+/* ─── Floor Reflection ───────────────────────────────────────────────────────── */
+.cfCardReflection {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  height: 60px;
   overflow: hidden;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  background: #0a0a0a;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  padding: 0;
+  pointer-events: none;
+  z-index: -1;
+  border-radius: 0 0 14px 14px;
+  opacity: 0.35;
+  transition: opacity 0.3s ease;
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 90%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, transparent 90%);
 }
 
-.thumbnail:hover {
-  transform: translateY(-2px);
-  border-color: rgba(255, 255, 255, 0.3);
-}
+.cfCardActive .cfCardReflection { opacity: 0.5; }
 
-.thumbnailActive {
-  border-width: 2px;
-  transform: scale(1.05);
-}
-
-.thumbnailImg {
+.cfCardReflectionImg {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: bottom;
+  transform: scaleY(-1);
+  pointer-events: none;
+  display: block;
+  filter: blur(1.5px) brightness(0.8) saturate(0.7);
 }
 
-.thumbnailBadge {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
+/* ─── Info Panel ─────────────────────────────────────────────────────────────── */
+.infoPanel {
+  margin-top: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  min-height: 55px;
+  text-align: center;
+  animation: infoPanelIn 0.4s ease forwards;
+  position: relative;
+  z-index: 10;
+  /* Horizontal padding so text doesn't hit screen edges */
+  padding: 0 1rem;
+  width: 100%;
+  box-sizing: border-box;
 }
+
+@keyframes infoPanelIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.infoCat {
+  font-size: 0.55rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: rgba(255,255,255,0.03);
+  padding: 0.15rem 0.8rem;
+  border-radius: 100px;
+  font-weight: 500;
+}
+
+.infoTitle {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+  margin: 0;
+  background: linear-gradient(135deg, #ffffff, rgba(255,255,255,0.7));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  /* Prevent long titles from overflowing */
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.infoSub {
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.4);
+  letter-spacing: 0.08em;
+  font-weight: 400;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ─── Navigation Controls ────────────────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.25rem;
+  position: relative;
+  z-index: 10;
+}
+
+.navArrow {
+  background: rgba(20, 20, 20, 0.6);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.5);
+  /* Bigger tap target on mobile */
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  /* Explicit tap highlight removal */
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navArrow:hover {
+  border-color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(40, 40, 40, 0.8);
+  transform: scale(1.05);
+}
+
+.navArrow:active {
+  transform: scale(0.95);
+  background: rgba(60, 60, 60, 0.9);
+}
+
+.dots {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 300px;
+}
+
+.dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  /* Bigger invisible tap target */
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Invisible tap area enlargement */
+.dot::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
+.dotActive {
+  width: 16px;
+  border-radius: 8px;
+  background: #ffffff !important;
+}
+
+.dot:hover { background: rgba(255, 255, 255, 0.6); transform: scale(1.2); }
 
 .dotsMore {
   color: rgba(255, 255, 255, 0.3);
@@ -1254,75 +610,359 @@
   margin: 0 0.25rem;
 }
 
-/* Responsive adjustments for thumbnail strip */
-@media (max-width: 640px) {
-  .thumbnailStrip {
-    gap: 0.25rem;
-    margin-top: 0.5rem;
-  }
-  
-  .thumbnailPrev,
-  .thumbnailNext {
-    width: 24px;
-    height: 24px;
-    font-size: 1rem;
-  }
-  
-  .thumbnail {
-    width: 40px;
-    height: 40px;
-  }
-  
-  .thumbnailTrack {
-    max-width: 280px;
-    gap: 0.35rem;
-  }
+.dragHint {
+  font-size: 0.5rem;
+  letter-spacing: 0.25em;
+  color: rgba(255, 255, 255, 0.15);
+  margin-top: 0.5rem;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+  font-weight: 400;
 }
 
-@media (max-width: 480px) {
-  .thumbnail {
-    width: 35px;
-    height: 35px;
-  }
-  
-  .thumbnailTrack {
-    max-width: 240px;
-    gap: 0.3rem;
-  }
-  
-  .thumbnailPrev,
-  .thumbnailNext {
-    width: 22px;
-    height: 22px;
-    font-size: 0.9rem;
-  }
-}
-
-/* Clean card overlay - no text, just subtle gradient */
-.cfCardOverlay {
-  position: absolute;
+/* ══════════════════════════════════════════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════════════════════════════════════════ */
+.modalBackdrop {
+  position: fixed;
   inset: 0;
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.3) 0%,
-    transparent 30%
-  );
-  border-radius: 14px;
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1rem;
+  pointer-events: auto;
+  animation: backdropIn 0.3s ease forwards;
+  /* Needed for iOS to fill safe areas */
+  padding-bottom: max(1rem, env(safe-area-inset-bottom));
+}
+
+@keyframes backdropIn {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to   { opacity: 1; backdrop-filter: blur(20px); }
+}
+
+.modal {
+  position: relative;
+  background: rgba(10, 10, 15, 0.95);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-top-color: rgba(255, 255, 255, 0.3);
+  border-radius: 32px;
+  overflow: hidden;
+  max-width: 1000px;
+  width: 95%;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 0 0 0.5px rgba(255, 255, 255, 0.1),
+    0 30px 60px -15px rgba(0, 0, 0, 0.5),
+    0 100px 150px -40px rgba(0, 0, 0, 0.7);
+  animation: modalIn 0.4s cubic-bezier(0.2, 1, 0.3, 1) forwards;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(20px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.closeBtn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.closeBtn:active { transform: scale(0.9); }
+
+@media (hover: hover) {
+  .closeBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    transform: rotate(90deg) scale(1.05);
+    border-color: rgba(255, 255, 255, 0.5);
+  }
+}
+
+.modalImgWrap {
+  width: 100%;
+  padding: 1rem 1rem 0.5rem 1rem;
+  box-sizing: border-box;
+  background: rgba(0, 0, 0, 0.2);
+  position: relative;
+  /* Allows the image area to shrink on small screens */
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+.modalImgStrip {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  border-radius: 20px;
+  cursor: grab;
+  user-select: none;
+  align-items: center;
+  justify-content: flex-start;
+  background: rgba(0, 0, 0, 0.15);
+  min-height: 200px;
+}
+
+.modalImgStrip::-webkit-scrollbar { display: none; }
+.modalImgStrip:active { cursor: grabbing; }
+
+.modalImg {
+  flex: 0 0 100%;
+  width: 100%;
+  height: auto;
+  max-height: 55vh;
+  object-fit: contain;
+  scroll-snap-align: start;
+  display: block;
   pointer-events: none;
-  z-index: 2;
-  transition: background 0.3s ease;
+  border-radius: 16px;
+  background: #0a0a0a;
+  padding: 0.25rem;
+  box-sizing: border-box;
 }
 
-.cfCardActive:hover .cfCardOverlay {
-  background: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.4) 0%,
-    transparent 35%
-  );
+.modalImageCounter {
+  position: absolute;
+  bottom: 20px;
+  right: 28px;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(16px);
+  padding: 0.4rem 1rem;
+  border-radius: 30px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.95);
+  z-index: 15;
+  pointer-events: none;
+  font-family: monospace;
+  letter-spacing: 0.08em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Remove the VIEW FULL indicator from cards - cleaner look */
-.cfCardActive::after {
-  display: none;
+.modalSwipeHint {
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  text-align: center;
 }
 
+.modalInfo {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  border-top: 0.5px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
+  /* Allow info to scroll if content is very tall */
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.modalCategory {
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.modalTitle {
+  font-size: 1.6rem;
+  color: #ffffff;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+.modalSub {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0;
+  letter-spacing: 0.05em;
+}
+
+.modalDesc {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  margin: 0.3rem 0 0;
+  font-weight: 400;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS
+══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Large tablet / small desktop ─── */
+@media (max-width: 1024px) {
+  .modalImg      { max-height: 58vh; }
+  .modalTitle    { font-size: 1.4rem; }
+}
+
+/* ── Tablet portrait ─── */
+@media (max-width: 768px) {
+  .gallerySection { padding: 0.75rem 0.75rem 0.5rem; }
+
+  .topBar { padding: 0 0.5rem; }
+
+  .infoPanel   { margin-top: 0.5rem; min-height: 50px; }
+  .infoTitle   { font-size: 1rem; }
+  .infoCat     { font-size: 0.5rem; }
+
+  .controls    { margin-top: 0.5rem; gap: 0.75rem; }
+  .navArrow    { width: 36px; height: 36px; }
+
+  .dots        { max-width: 240px; }
+  .dot         { width: 4px; height: 4px; }
+  .dotActive   { width: 14px; }
+
+  .dragHint    { font-size: 0.45rem; }
+
+  /* Modal */
+  .modal       { max-height: 88vh; border-radius: 26px; }
+  .modalImg    { max-height: 52vh; }
+  .modalTitle  { font-size: 1.3rem; }
+  .modalInfo   { padding: 0.8rem 1.2rem 1.2rem; }
+  .modalImageCounter { bottom: 15px; right: 20px; padding: 0.3rem 0.8rem; font-size: 0.6rem; }
+}
+
+/* ── Mobile landscape / large phone ─── */
+@media (max-width: 640px) {
+  .gallerySection { padding: 0.5rem 0.5rem 0.5rem; }
+
+  /* Category button: hide text label, show icon + badge only */
+  .catBtnLabel { display: none; }
+  .catBtn {
+    padding: 0.45rem 0.75rem;
+    gap: 0.35rem;
+    font-size: 0.65rem;
+  }
+  .catBtnIcon  { font-size: 0.85rem; }
+
+  /* Work counter compact */
+  .workCounter    { padding: 0.25rem 0.7rem; }
+  .workCounterCurrent { font-size: 0.85rem; }
+  .workCounterTotal   { font-size: 0.7rem; }
+  .workCounterLabel   { font-size: 0.45rem; margin-left: 0.2rem; }
+
+  .infoTitle   { font-size: 0.95rem; }
+  .infoSub     { font-size: 0.55rem; }
+
+  .controls    { gap: 0.5rem; }
+  .navArrow    { width: 38px; height: 38px; font-size: 1rem; }
+
+  .dots        { max-width: 200px; gap: 4px; }
+
+  /* Modal: slide up from bottom */
+  .modalBackdrop {
+    padding: 0;
+    align-items: flex-end;
+  }
+
+  .modal {
+    max-width: 100%;
+    width: 100%;
+    border-radius: 28px 28px 0 0;
+    max-height: 92vh;
+    /* Safe area for iOS home indicator */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  /* Drag handle pill at top of bottom sheet */
+  .modal::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 2px;
+    margin: 12px auto 0;
+    flex-shrink: 0;
+  }
+
+  .modalImg    { max-height: 44vh; padding: 0.15rem; }
+  .modalTitle  { font-size: 1.15rem; }
+  .modalInfo   { padding: 0.75rem 1rem 1rem; }
+  .closeBtn    { top: 14px; right: 14px; width: 34px; height: 34px; font-size: 0.8rem; }
+  .modalImageCounter { bottom: 12px; right: 15px; padding: 0.25rem 0.7rem; font-size: 0.55rem; }
+
+  /* Dropdown: position from left on mobile */
+  .dropdown { left: 0; right: auto; }
+}
+
+/* ── Small phone ─── */
+@media (max-width: 480px) {
+  .gallerySection { padding: 0.5rem 0.25rem 0.5rem; }
+
+  .topBar { margin-bottom: 0.5rem; }
+
+  .catBtn { padding: 0.4rem 0.65rem; }
+
+  .workCounterLabel { display: none; }
+
+  .infoTitle   { font-size: 0.9rem; }
+  .infoCat     { font-size: 0.48rem; letter-spacing: 0.18em; }
+
+  .navArrow    { width: 36px; height: 36px; font-size: 0.9rem; }
+  .dots        { max-width: 180px; gap: 3px; }
+  .dot         { width: 4px; height: 4px; }
+  .dotActive   { width: 12px; }
+
+  .modalImg    { max-height: 40vh; }
+  .modalTitle  { font-size: 1rem; }
+  .modalSub    { font-size: 0.7rem; }
+  .modalDesc   { font-size: 0.8rem; }
+  .modalInfo   { gap: 0.2rem; }
+}
+
+/* ── Very small phone ─── */
+@media (max-width: 360px) {
+  .infoTitle   { font-size: 0.82rem; }
+  .modalTitle  { font-size: 0.9rem; }
+  .navArrow    { width: 32px; height: 32px; }
+  .dots        { max-width: 150px; }
+}
+
+/* ─── High Performance: Respect reduced motion ────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .cfCard,
+  .cfCardImg,
+  .ambientGlow,
+  .infoPanel,
+  .modal,
+  .modalBackdrop,
+  .shimmerRing {
+    transition: none !important;
+    animation: none !important;
+  }
+  .shimmerRing { display: none; }
+}

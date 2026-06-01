@@ -1,4 +1,4 @@
-// Gallery.tsx - Cleaner cards, larger size, work counter, touchpad support (no thumbnails)
+// Gallery.tsx - Mobile-responsive coverflow gallery
 "use client";
 
 import { useState, useRef, useEffect, useCallback, useLayoutEffect } from "react";
@@ -20,7 +20,7 @@ export type GalleryItem = {
 // ─── Constants ────────────────────────────────────────────────────────────────
 const CATEGORY_LIST = [
   "PHOTO MANIPLATION",
-  "UI/UX DESIGN", 
+  "UI/UX DESIGN",
   "WEB DESIGN",
   "ANIME GRAPHICS",
   "CAR GRAPHICS",
@@ -88,52 +88,52 @@ function proj(
 }
 
 // ─── Default projects ─────────────────────────────────────────────────────────
+// ─── Default projects ─────────────────────────────────────────────────────────
 const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p1",  "PHOTO MANIPLATION",  "Baby Jellys", "Photo Manipulation & Digital Art", "My first ever work with Photoshop.", ["/Images/Baby jellys compressed.webp"]),
-  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC Player Poster", "A Match Day poster of Reece James.", ["/Images/Reeece James compressed.webp"]),
+  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC Player Poster", "A Match Day poster of Reece James for Chelsea FC.", ["/Images/Reeece James compressed.webp"]),
   proj("p3",  "FOOTBALL GRAPHICS",  "Antony Poster", "Real Betis Player Poster", "A graphic poster for Antony at Real Betis.", ["/Images/Antony poster psd-Smaller.webp"]),
   proj("p4",  "FOOTBALL GRAPHICS",  "Jude Bellingham Poster", "England Poster", "A graphic poster of Jude Bellingham.", ["/Images/Jude Poster-Second Version.webp"]),
-  proj("p5",  "ANIME GRAPHICS",     "Sin Jin Woo Poster", "Solo Leveling Poster", "A graphic poster for Sin Jin Woo.", ["/Images/Sun jin woo poster 2.webp"]),
-  proj("p6",  "ANIME GRAPHICS",     "Sun Suho Poster", "Solo Leveling Ragnarok Poster", "A graphic poster for Sun Suho.", ["/Images/Sung suho poster 2.webp"]),
-  proj("p7",  "ANIME GRAPHICS",     "Burner Poster", "Burning Effect Poster", "A poster for the character Burner.", ["/Images/Burner poster compressed.webp"]),
+  proj("p5",  "ANIME GRAPHICS",     "Sin Jin Woo Poster", "Solo Leveling Poster", "A graphic poster for Sin Jin Woo from the Korean comic Solo Leveling.", ["/Images/Sun jin woo poster 2.webp"]),
+  proj("p6",  "ANIME GRAPHICS",     "Sun Suho Poster", "Solo Leveling Ragnarok Poster", "A graphic poster for Sun Suho from the Korean comic Solo Leveling Ragnarok.", ["/Images/Sung suho poster 2.webp"]),
+  proj("p7",  "ANIME GRAPHICS",     "Burner Poster", "Burning Effect Poster", "A poster for the character Burner from the Korean comic Burning Effect.", ["/Images/Burner poster compressed.webp"]),
   proj("p8",  "CAR GRAPHICS",       "Nissan Graphic Poster", "Nissan Car Poster", "A sleek graphic poster for the Nissan brand.", ["/Images/Nissan poster 2.webp"]),
-  proj("p9",  "ANIME GRAPHICS",     "Kai De Anectode Poster", "Burning Effect Poster", "A poster for Kai De Anectode.", ["/Images/KAI poster compressed.webp"]),
-  proj("p10", "ANIME GRAPHICS",     "Roy Poster", "Burning Effect Poster", "A poster for Roy.", ["/Images/Roy poster compressed.webp"]),
-  proj("p11", "ANIME GRAPHICS",     "Great Poster", "Burning Effect Poster", "A poster for Great.", ["/Images/Great poster compressed.webp"]),
-  proj("p12", "ANIME GRAPHICS",     "Luck Poster", "Black Clover Poster", "A poster for Luck.", ["/Images/Luck Poster.webp"]),
-  proj("p13", "ANIME GRAPHICS",     "Zora Poster", "Black Clover Poster", "A poster for Zora.", ["/Images/Zora poster.webp"]),
-  proj("p14", "ANIME GRAPHICS",     "Asta Poster", "Black Clover Poster", "A poster for Asta.", ["/Images/Asta poster 2.jpg"]),
-  proj("p15", "ANIME GRAPHICS",     "Mereleona Vermillion Poster", "Black Clover Poster", "A poster for Mereleona Vermillion.", ["/Images/Vermillion Poster.webp"]),
-  proj("p16", "ANIME GRAPHICS",     "Aizen Sosuke Poster", "Bleach Poster", "A poster for Aizen Sosuke.", ["/Images/Aizen Poster.webp"]),
-  proj("p17", "ANIME GRAPHICS",     "Liebe Poster", "Black Clover Poster", "A poster for Liebe.", ["/Images/Liebe Poster.webp"]),
-  proj("p18", "ANIME GRAPHICS",     "Asta Brutalism Poster", "Black Clover Poster", "A brutalism-style poster for Asta.", ["/Images/Asta brutalism poster Instagram.webp"]),
-  proj("p19", "ANIME GRAPHICS",     "Han Ysalt Poster", "Pick Me Up Infinite Gacha", "A poster for Han Ysalt.", ["/Images/Han ysalt Poster-Smaller.webp"]),
-  proj("p20", "ANIME GRAPHICS",     "Yvolka Rivela Poster", "Pick Me Up Infinite Gacha", "A poster for Yvolka Rivela.", ["/Images/yvolka poster.webp"]),
+  proj("p9",  "ANIME GRAPHICS",     "Kai De Anectode Poster", "Burning Effect Poster", "A poster for Kai De Anectode from the Korean comic Burning Effect.", ["/Images/KAI poster compressed.webp"]),
+  proj("p10", "ANIME GRAPHICS",     "Roy Poster", "Burning Effect Poster", "A poster for Roy from the Korean comic Burning Effect.", ["/Images/Roy poster compressed.webp"]),
+  proj("p11", "ANIME GRAPHICS",     "Great Poster", "Burning Effect Poster", "A poster for Great from the Korean comic Burning Effect.", ["/Images/Great poster compressed.webp"]),
+  proj("p12", "ANIME GRAPHICS",     "Luck Poster", "Black Clover Poster", "A poster for Luck from the Anime Black Clover.", ["/Images/Luck Poster.webp"]),
+  proj("p13", "ANIME GRAPHICS",     "Zora Poster", "Black Clover Poster", "A poster for Zora from the Anime Black Clover.", ["/Images/Zora poster.webp"]),
+  proj("p14", "ANIME GRAPHICS",     "Asta Poster", "Black Clover Poster", "A poster for Asta from the Anime Black Clover.", ["/Images/Asta poster 2.jpg"]),
+  proj("p15", "ANIME GRAPHICS",     "Mereleona Vermillion Poster", "Black Clover Poster", "A poster for Mereleona Vermillion from the Anime Black Clover.", ["/Images/Vermillion Poster.webp"]),
+  proj("p16", "ANIME GRAPHICS",     "Aizen Sosuke Poster", "Bleach Poster", "A poster for Aizen Sosuke from the Anime Bleach.", ["/Images/Aizen Poster.webp"]),
+  proj("p17", "ANIME GRAPHICS",     "Liebe Poster", "Black Clover Poster", "A poster for Liebe from the Anime Black Clover.", ["/Images/Liebe Poster.webp"]),
+  proj("p18", "ANIME GRAPHICS",     "Asta Brutalism Poster", "Black Clover Poster", "A brutalism-style poster for Asta from the Anime Black Clover.", ["/Images/Asta brutalism poster Instagram.webp"]),
+  proj("p19", "ANIME GRAPHICS",     "Han Ysalt Poster", "Pick Me Up Infinite Gacha", "A poster for Han Ysalt from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/Han ysalt Poster-Smaller.webp"]),
+  proj("p20", "ANIME GRAPHICS",     "Yvolka Rivela Poster", "Pick Me Up Infinite Gacha", "A poster for Yvolka Rivela from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/yvolka poster.webp"]),
   proj("p21", "GAME GRAPHICS",      "Helldivers 2 Poster", "HELLDIVERS 2", "A propaganda poster for Helldivers 2.", ["/Images/Helldivers 2 propaganda poster 2 Complete.webp"]),
   proj("p22", "CAR GRAPHICS",       "Porsche Poster", "Porsche Car Poster", "A graphic poster for Porsche.", ["/Images/Porshce image compressed.webp"]),
   proj("p23", "BRANDING",           "Road House Poster", "ROAD HOUSE GUEST HOUSE", "A concept brand poster.", ["/Images/Guest-House Poster-2.webp"]),
   proj("p24", "BRANDING",           "Math Academy Poster", "Educational Brand Poster", "A poster for Math Academy.", ["/Images/MAth academy compressed.webp"]),
   proj("p25", "BRANDING",           "FessyNam Poster", "FessyNam IT Brand Poster", "A poster for FessyNam.", ["/Images/FessyNam compressed.webp"]),
   proj("p26", "BRANDING",           "Sono Ace Poster", "Sono Ace Audio Brand Poster", "A poster for Sono Ace headphones.", ["/Images/Sono Ace Poster.webp"]),
-  proj("p27", "FOOTBALL GRAPHICS",  "Lewandowski Poster", "FC Bayern Poster", "A poster for Robert Lewandowski.", ["/Images/Robert lewandowski poster-smaller.webp"]),
-  proj("p28", "FOOTBALL GRAPHICS",  "Zlatan Poster", "FC Barcelona Poster", "A poster for Zlatan Ibrahimovic.", ["/Images/Zlatan Poster.webp"]),
+  proj("p27", "FOOTBALL GRAPHICS",  "Lewandowski Poster", "FC Bayern Poster", "A poster for Robert Lewandowski showcasing his stats for FC Bayern.", ["/Images/Robert lewandowski poster-smaller.webp"]),
+  proj("p28", "FOOTBALL GRAPHICS",  "Zlatan Poster", "FC Barcelona Poster", "A poster for Zlatan Ibrahimovic for his time at FC Barcelona.", ["/Images/Zlatan Poster.webp"]),
   proj("p29", "FOOTBALL GRAPHICS",  "Desire Doue Poster", "PSG Poster", "A poster for Desire Doue.", ["/Images/poster instagram.webp"]),
   proj("p30", "FOOTBALL GRAPHICS",  "Desire Doue Poster 2", "PSG Poster", "A second poster for Desire Doue.", ["/Images/Desire Doue poster 2.webp"]),
-  proj("p31", "FOOTBALL GRAPHICS",  "Estevao Willian Poster", "Chelsea FC Poster", "A poster for Estevao Willian.", ["/Images/Estevao poster-New smaller.webp"]),
-  proj("p32", "FOOTBALL GRAPHICS",  "Noni Madueke Poster", "Chelsea FC Poster", "A poster for Noni Madueke.", ["/Images/Noni madueke compressed.webp"]),
-  proj("p33", "FOOTBALL GRAPHICS",  "Mohamed Salah Poster", "Liverpool FC Poster", "A poster for Mohamed Salah.", ["/Images/Salah poster-medium sized.webp"]),
-  proj("p34", "FOOTBALL GRAPHICS",  "Neymar Jr Poster", "Santos FC Poster", "A poster for Neymar Jr.", ["/Images/Neymar Poster-Smaller.webp"]),
+  proj("p31", "FOOTBALL GRAPHICS",  "Estevao Willian Poster", "Chelsea FC Poster", "A Matchday Poster for Estevao Willian.", ["/Images/Estevao poster-New smaller.webp"]),
+  proj("p32", "FOOTBALL GRAPHICS",  "Noni Madueke Poster", "Chelsea FC Poster", "A Matchday Poster for Noni Madueke.", ["/Images/Noni madueke compressed.webp"]),
+  proj("p33", "FOOTBALL GRAPHICS",  "Mohamed Salah Poster", "Liverpool FC Poster", "A poster for Mohamed Salah showcasing his stats for Liverpool FC.", ["/Images/Salah poster-medium sized.webp"]),
+  proj("p34", "FOOTBALL GRAPHICS",  "Neymar Jr Poster", "Santos FC Poster", "A graphic poster for Neymar Jr showing all the clubs he has played for.", ["/Images/Neymar Poster-Smaller.webp"]),
   proj("p35", "FOOTBALL GRAPHICS",  "Luis Suarez Poster", "FC Barcelona Poster", "A stats poster for Luis Suarez.", ["/Images/Luiz suarez poster-smaller.webp"]),
-  proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC Poster", "A poster for Malo Gusto.", ["/Images/Malo gusto image compressed.webp"]),
+  proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC Poster", "A graphic poster for Malo Gusto showcasing his stats for Chelsea FC.", ["/Images/Malo gusto image compressed.webp"]),
 ];
 
-// ─── Coverflow Math - LARGER CARDS ──────────────────────────────────────────
-function getCoverflowTransform(offset: number, cardWidth: number) {
+
+// ─── Coverflow Math ──────────────────────────────────────────────────────────
+function getCoverflowTransform(offset: number, cardWidth: number, isMobile: boolean) {
   const absOffset = Math.abs(offset);
-  
-  // Only show 2 cards on each side
-  const MAX_VISIBLE = 2;
-  
+  const MAX_VISIBLE = isMobile ? 1 : 2;
+
   if (absOffset > MAX_VISIBLE) {
     return {
       transform: `translateX(${offset > 0 ? 600 : -600}px) scale(0)`,
@@ -142,32 +142,27 @@ function getCoverflowTransform(offset: number, cardWidth: number) {
       pointerEvents: "none" as const,
     };
   }
-  
+
   const direction = Math.sign(offset);
-  
-  // Slightly tighter spacing for larger cards
-  const SPACING = cardWidth * 0.85;
+  // Tighter spacing on mobile so side cards peek in nicely
+  const SPACING = isMobile ? cardWidth * 0.68 : cardWidth * 0.85;
   const translateX = direction * absOffset * SPACING;
-  
-  // Gentle rotation for depth
-  const MAX_ROTATION = 25;
+
+  const MAX_ROTATION = isMobile ? 15 : 25;
   const rotation = direction * Math.min(absOffset * 12, MAX_ROTATION);
-  
-  // Scale: active full size, others smaller
+
   let scale = 1;
-  if (absOffset === 1) scale = 0.75;
+  if (absOffset === 1) scale = isMobile ? 0.72 : 0.75;
   else if (absOffset === 2) scale = 0.55;
-  
-  // Z-depth
+
   const translateZ = -absOffset * 35;
-  
-  // Opacity
+
   let opacity = 1;
-  if (absOffset === 1) opacity = 0.75;
+  if (absOffset === 1) opacity = isMobile ? 0.55 : 0.75;
   else if (absOffset === 2) opacity = 0.45;
-  
+
   const zIndex = 10 - absOffset;
-  
+
   return {
     transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotation}deg) scale(${scale})`,
     opacity,
@@ -188,7 +183,8 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
   const [modalProject, setModalProject] = useState<GalleryItem | null>(null);
   const [portalReady, setPortalReady] = useState(false);
   const [cardWidth, setCardWidth] = useState(300);
-  
+  const [isMobile, setIsMobile] = useState(false);
+
   const stageRef = useRef<HTMLDivElement>(null);
   const dropRef = useRef<HTMLDivElement>(null);
   const autoRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -196,23 +192,38 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
   const isModalOpenRef = useRef(false);
   const isDraggingRef = useRef(false);
   const dragStartXRef = useRef(0);
-  
+  // Touch tracking
+  const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
+  const isTouchScrollingRef = useRef(false);
+
   // Compute filtered list
   const filtered = selectedCats.size === 0
     ? projects
     : projects.filter((p) => selectedCats.has(p.category as Category));
   const totalItems = filtered.length;
   const currentPosition = activeIndex + 1;
-  
-  // Measure and set larger card width based on viewport
+
+  // Measure card width + detect mobile
   useLayoutEffect(() => {
     function updateDimensions() {
+      const vw = window.innerWidth;
+      setIsMobile(vw < 640);
+
       if (stageRef.current) {
         const stageWidth = stageRef.current.offsetWidth;
-        // LARGER CARD SIZES
-        let newWidth = Math.min(320, Math.max(220, stageWidth * 0.22));
-        if (window.innerWidth < 768) newWidth = Math.min(240, stageWidth * 0.35);
-        if (window.innerWidth < 480) newWidth = Math.min(200, stageWidth * 0.45);
+        let newWidth: number;
+        if (vw < 380) {
+          newWidth = Math.min(200, stageWidth * 0.62);
+        } else if (vw < 480) {
+          newWidth = Math.min(220, stageWidth * 0.58);
+        } else if (vw < 640) {
+          newWidth = Math.min(240, stageWidth * 0.52);
+        } else if (vw < 768) {
+          newWidth = Math.min(260, stageWidth * 0.38);
+        } else {
+          newWidth = Math.min(320, Math.max(220, stageWidth * 0.22));
+        }
         setCardWidth(newWidth);
       }
     }
@@ -220,16 +231,16 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
-  
+
   useEffect(() => {
     setPortalReady(true);
   }, []);
-  
+
   // Reset index when filter changes
   useEffect(() => {
     setActiveIndex(0);
   }, [selectedCats]);
-  
+
   // Auto-advance carousel
   function startAuto() {
     stopAuto();
@@ -239,76 +250,64 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
       }
     }, 5000);
   }
-  
+
   function stopAuto() {
     if (autoRef.current) {
       clearInterval(autoRef.current);
       autoRef.current = null;
     }
   }
-  
+
   useEffect(() => {
     startAuto();
     return stopAuto;
   }, [totalItems]);
-  
-  // Navigation functions
+
+  // Navigation
   const goToPrevious = useCallback(() => {
     setActiveIndex((prev) => (prev - 1 + totalItems) % totalItems);
     startAuto();
   }, [totalItems]);
-  
+
   const goToNext = useCallback(() => {
     setActiveIndex((prev) => (prev + 1) % totalItems);
     startAuto();
   }, [totalItems]);
-  
+
   const goToIndex = useCallback((index: number) => {
     setActiveIndex(index);
     startAuto();
   }, []);
-  
-  // Improved drag handlers for touchpad
+
+  // ─── Pointer drag (desktop / trackpad) ───────────────────────────────────
   const handleDragStart = (e: React.PointerEvent) => {
+    // Don't intercept touch — handled separately
+    if (e.pointerType === "touch") return;
     if ((e.target as HTMLElement).closest("[data-no-drag]")) return;
     isDraggingRef.current = true;
     dragStartXRef.current = e.clientX;
     stopAuto();
-    if (stageRef.current) {
-      stageRef.current.style.cursor = "grabbing";
-    }
+    if (stageRef.current) stageRef.current.style.cursor = "grabbing";
   };
-  
+
   const handleDragMove = useCallback((e: PointerEvent) => {
+    if (e.pointerType === "touch") return;
     if (!isDraggingRef.current) return;
-    
     const delta = e.clientX - dragStartXRef.current;
-    const absDelta = Math.abs(delta);
-    const swipeThreshold = 30;
-    
-    if (absDelta > swipeThreshold) {
+    if (Math.abs(delta) > 30) {
       isDraggingRef.current = false;
-      
-      if (delta > 0) {
-        goToPrevious();
-      } else {
-        goToNext();
-      }
-      
-      if (stageRef.current) {
-        stageRef.current.style.cursor = "";
-      }
+      delta > 0 ? goToPrevious() : goToNext();
+      if (stageRef.current) stageRef.current.style.cursor = "";
     }
   }, [goToPrevious, goToNext]);
-  
-  const handleDragEnd = useCallback(() => {
+
+  const handleDragEnd = useCallback((e: PointerEvent) => {
+    if (e.pointerType === "touch") return;
     isDraggingRef.current = false;
-    if (stageRef.current) {
-      stageRef.current.style.cursor = "";
-    }
+    if (stageRef.current) stageRef.current.style.cursor = "";
     startAuto();
   }, []);
-  
+
   useEffect(() => {
     window.addEventListener("pointermove", handleDragMove);
     window.addEventListener("pointerup", handleDragEnd);
@@ -317,7 +316,46 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
       window.removeEventListener("pointerup", handleDragEnd);
     };
   }, [handleDragMove, handleDragEnd]);
-  
+
+  // ─── Native touch handlers (mobile swipe) ───────────────────────────────
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    if ((e.target as HTMLElement).closest("[data-no-drag]")) return;
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    isTouchScrollingRef.current = false;
+    stopAuto();
+  }, []);
+
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    const dx = e.touches[0].clientX - touchStartXRef.current;
+    const dy = e.touches[0].clientY - touchStartYRef.current;
+
+    // If primarily vertical, let the page scroll
+    if (!isTouchScrollingRef.current && Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) {
+      isTouchScrollingRef.current = true;
+    }
+
+    // If horizontal swipe, prevent page scroll and handle carousel
+    if (!isTouchScrollingRef.current && Math.abs(dx) > 8) {
+      e.preventDefault();
+    }
+  }, []);
+
+  const handleTouchEnd = useCallback((e: React.TouchEvent) => {
+    if (isTouchScrollingRef.current) {
+      startAuto();
+      return;
+    }
+    const dx = e.changedTouches[0].clientX - touchStartXRef.current;
+    const dy = e.changedTouches[0].clientY - touchStartYRef.current;
+
+    // Only trigger swipe if horizontal movement is dominant and >= 40px
+    if (Math.abs(dx) >= 40 && Math.abs(dx) > Math.abs(dy)) {
+      dx > 0 ? goToPrevious() : goToNext();
+    }
+    startAuto();
+  }, [goToPrevious, goToNext]);
+
   // Keyboard navigation
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -331,7 +369,7 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [goToPrevious, goToNext]);
-  
+
   // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -342,34 +380,35 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  
+
   function openModal(project: GalleryItem) {
     isModalOpenRef.current = true;
     setModalProject(project);
     document.body.style.overflow = "hidden";
   }
-  
+
   function closeModal() {
     isModalOpenRef.current = false;
     setModalProject(null);
     document.body.style.overflow = "";
   }
-  
+
   function toggleCategory(cat: Category) {
     setSelectedCats((prev) => {
       const newSet = new Set(prev);
-      if (newSet.has(cat)) {
-        newSet.delete(cat);
-      } else {
-        newSet.add(cat);
-      }
+      newSet.has(cat) ? newSet.delete(cat) : newSet.add(cat);
       return newSet;
     });
   }
-  
+
   const activeProject = filtered[activeIndex] ?? null;
   const cardHeight = cardWidth * 1.4;
-  
+
+  // Stage height: taller on mobile to give room for the card + reflection
+  const stageHeight = isMobile
+    ? Math.round(cardHeight * 1.18)
+    : 420;
+
   return (
     <section className={styles.gallerySection}>
       {/* Top Bar */}
@@ -380,7 +419,7 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
             onClick={() => setDropOpen((v) => !v)}
           >
             <span className={styles.catBtnIcon}>⊞</span>
-            CATEGORIES
+            <span className={styles.catBtnLabel}>CATEGORIES</span>
             <span className={styles.catBtnChevron}>{dropOpen ? "▲" : "▼"}</span>
             {selectedCats.size > 0 && (
               <span className={styles.catBadge}>{selectedCats.size}</span>
@@ -390,10 +429,7 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
             <div className={styles.dropdown}>
               <button
                 className={`${styles.dropItem} ${selectedCats.size === 0 ? styles.dropItemActive : ""}`}
-                onClick={() => {
-                  setSelectedCats(new Set());
-                  setDropOpen(false);
-                }}
+                onClick={() => { setSelectedCats(new Set()); setDropOpen(false); }}
               >
                 <span className={styles.dropIcon}>✦</span>ALL
                 {selectedCats.size === 0 && <span className={styles.dropCheck}>✓</span>}
@@ -413,7 +449,7 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
             </div>
           )}
         </div>
-        
+
         {/* Work counter */}
         <div className={styles.workCounter}>
           <span className={styles.workCounterCurrent}>{currentPosition}</span>
@@ -422,12 +458,16 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
           <span className={styles.workCounterLabel}>WORKS</span>
         </div>
       </div>
-      
-      {/* 3D Coverflow Stage - LARGER HEIGHT for bigger cards */}
+
+      {/* 3D Coverflow Stage */}
       <div
         className={styles.stage}
         ref={stageRef}
+        style={{ height: stageHeight }}
         onPointerDown={handleDragStart}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
         onMouseEnter={() => (isHoveringRef.current = true)}
         onMouseLeave={() => (isHoveringRef.current = false)}
       >
@@ -438,14 +478,14 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
             style={{ background: activeProject.accent }}
           />
         )}
-        
+
         {/* Coverflow Track */}
         <div className={styles.coverflowTrack}>
           {filtered.map((project, idx) => {
             const offset = idx - activeIndex;
-            const transform = getCoverflowTransform(offset, cardWidth);
+            const transform = getCoverflowTransform(offset, cardWidth, isMobile);
             const isActive = offset === 0;
-            
+
             return (
               <div
                 key={project.id}
@@ -459,11 +499,8 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
                   ...transform,
                 }}
                 onClick={() => {
-                  if (isActive) {
-                    openModal(project);
-                  } else {
-                    goToIndex(idx);
-                  }
+                  if (isActive) openModal(project);
+                  else goToIndex(idx);
                 }}
               >
                 <img
@@ -472,12 +509,8 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
                   className={styles.cfCardImg}
                   draggable={false}
                 />
-                
-                {/* Clean overlay - just a subtle gradient */}
                 <div className={styles.cfCardOverlay} />
-                
                 {isActive && <div className={styles.shimmerRing} />}
-                
                 <div className={styles.cfCardReflection}>
                   <img
                     src={project.images[0]}
@@ -490,29 +523,24 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
             );
           })}
         </div>
-        
+
         <div className={styles.reflectionStrip} />
       </div>
-      
+
       {/* Info Panel */}
       {activeProject && (
         <div className={styles.infoPanel}>
-          <span
-            className={styles.infoCat}
-            style={{ color: activeProject.accent }}
-          >
+          <span className={styles.infoCat} style={{ color: activeProject.accent }}>
             {CATEGORY_ICONS[activeProject.category]} {activeProject.category}
           </span>
           <h2 className={styles.infoTitle}>{activeProject.title}</h2>
           <p className={styles.infoSub}>{activeProject.sub}</p>
         </div>
       )}
-      
+
       {/* Dot Navigation */}
       <div className={styles.controls}>
-        <button className={styles.navArrow} onClick={goToPrevious} aria-label="Previous">
-          ←
-        </button>
+        <button className={styles.navArrow} onClick={goToPrevious} aria-label="Previous">←</button>
         <div className={styles.dots}>
           {filtered.slice(0, 12).map((project, idx) => (
             <button
@@ -525,13 +553,11 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
           ))}
           {totalItems > 12 && <span className={styles.dotsMore}>⋯</span>}
         </div>
-        <button className={styles.navArrow} onClick={goToNext} aria-label="Next">
-          →
-        </button>
+        <button className={styles.navArrow} onClick={goToNext} aria-label="Next">→</button>
       </div>
-      
-      <p className={styles.dragHint}>← SWIPE, DRAG, OR USE TOUCHPAD →</p>
-      
+
+      <p className={styles.dragHint}>← SWIPE OR DRAG →</p>
+
       {/* Modal Portal */}
       {portalReady && modalProject && createPortal(
         <Modal project={modalProject} onClose={closeModal} />,
@@ -545,8 +571,13 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
 function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void }) {
   const stripRef = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  // Mouse drag
   const dragRef = useRef({ active: false, startX: 0, scrollLeft: 0 });
-  
+  // Touch swipe in modal
+  const touchStartXRef = useRef(0);
+  const touchStartYRef = useRef(0);
+  const isTouchScrollRef = useRef(false);
+
   const updateImageIndex = useCallback(() => {
     if (stripRef.current) {
       const scrollLeft = stripRef.current.scrollLeft;
@@ -555,57 +586,63 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
       setCurrentImageIndex(Math.min(index, project.images.length - 1));
     }
   }, [project.images.length]);
-  
+
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       if (!dragRef.current.active || !stripRef.current) return;
       const dx = e.clientX - dragRef.current.startX;
       stripRef.current.scrollLeft = dragRef.current.scrollLeft - dx;
-      updateImageIndex();
     };
-    
-    const handleMouseUp = () => {
-      dragRef.current.active = false;
-    };
-    
-    const handleScroll = () => {
-      updateImageIndex();
-    };
-    
+    const handleMouseUp = () => { dragRef.current.active = false; };
+    const strip = stripRef.current;
+    strip?.addEventListener("scroll", updateImageIndex);
     window.addEventListener("mousemove", handleMouseMove);
     window.addEventListener("mouseup", handleMouseUp);
-    
-    if (stripRef.current) {
-      stripRef.current.addEventListener("scroll", handleScroll);
-    }
-    
     return () => {
+      strip?.removeEventListener("scroll", updateImageIndex);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
-      if (stripRef.current) {
-        stripRef.current.removeEventListener("scroll", handleScroll);
-      }
     };
   }, [updateImageIndex]);
-  
+
+  // Prevent background scroll while modal open
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => { document.body.style.overflow = ""; };
+  }, []);
+
+  const handleModalTouchStart = (e: React.TouchEvent) => {
+    touchStartXRef.current = e.touches[0].clientX;
+    touchStartYRef.current = e.touches[0].clientY;
+    isTouchScrollRef.current = false;
+  };
+
+  const handleModalTouchMove = (e: React.TouchEvent) => {
+    const dx = e.touches[0].clientX - touchStartXRef.current;
+    const dy = e.touches[0].clientY - touchStartYRef.current;
+    if (!isTouchScrollRef.current && Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 8) {
+      isTouchScrollRef.current = true;
+    }
+    // horizontal swipe in the image strip — let native scroll handle it
+  };
+
   return (
     <div className={styles.modalBackdrop} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">
-          ✕
-        </button>
-        
+      <div
+        className={styles.modal}
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={handleModalTouchStart}
+        onTouchMove={handleModalTouchMove}
+      >
+        <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
+
         <div className={styles.modalImgWrap}>
           <div
             className={styles.modalImgStrip}
             ref={stripRef}
             onMouseDown={(e) => {
               if (!stripRef.current) return;
-              dragRef.current = {
-                active: true,
-                startX: e.clientX,
-                scrollLeft: stripRef.current.scrollLeft,
-              };
+              dragRef.current = { active: true, startX: e.clientX, scrollLeft: stripRef.current.scrollLeft };
             }}
           >
             {project.images.map((src, idx) => (
@@ -624,7 +661,7 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
             </div>
           )}
         </div>
-        
+
         <div className={styles.modalInfo}>
           <span className={styles.modalCategory} style={{ color: project.accent }}>
             {CATEGORY_ICONS[project.category]} {project.category}
