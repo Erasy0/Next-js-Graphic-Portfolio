@@ -1,4 +1,4 @@
-/* globals.css - Updated for proper scrolling */
+/* globals.css — full replacement */
 @import "tailwindcss";
 
 :root {
@@ -23,11 +23,13 @@
   }
 }
 
+/* ─── Custom Fonts ─── */
 @font-face {
   font-family: "CalSans";
   src: url("/Fonts/CalSans-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -35,6 +37,7 @@
   src: url("/Fonts/Boldye.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
@@ -42,8 +45,10 @@
   src: url("/Fonts/JuliusSansOne-Regular.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
+  font-display: swap;
 }
 
+/* ─── Base ─── */
 body {
   background: #000;
   color: var(--foreground);
@@ -51,25 +56,50 @@ body {
   overflow: auto;
   height: 100%;
   touch-action: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
+
+body::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
 }
 
 html {
   height: 100%;
   overflow: auto;
-  scroll-behavior: smooth;
+  /* Remove scroll-behavior here — Lenis / snap-container handles it */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
-/* ─── Snap scroll container - FIXED ─── */
+html::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+/* ─── Snap scroll container ─── */
 .snap-container {
   height: 100vh;
   overflow-y: auto;
   scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
+  /* scroll-behavior: smooth removed — Lenis owns this */
   overscroll-behavior-y: contain;
   -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
 
-/* ─── Hero section — exact viewport height ─── */
+.snap-container::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+  /*
+    Promote to its own compositor layer so the browser can scroll it
+    without involving the main thread. Combined with Lenis this keeps
+    the progress bar silky at 120 fps on high-refresh devices.
+  */
+
+
+/* ─── Snap sections ─── */
 .snap-section {
   scroll-snap-align: start;
   scroll-snap-stop: always;
@@ -78,14 +108,12 @@ html {
   flex-direction: column;
 }
 
-/* ─── Gallery section — auto height (no constraints) ─── */
+/* ─── Last section — content-height, no forced min-height ─── */
 .snap-section:last-child {
-  /* Remove min-height constraint - let content determine height */
   min-height: auto;
-  /* Keep snap alignment at start only */
   scroll-snap-align: start;
   scroll-snap-stop: always;
-  /* Ensure all content is visible */
   height: auto;
   overflow: visible;
 }
+
