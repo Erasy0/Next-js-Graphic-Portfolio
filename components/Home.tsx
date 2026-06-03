@@ -28,6 +28,8 @@ export default function HomeComp() {
         EXPLORE MY WORK <span className={styles.arrow}>↗</span>
       </a>
 
+
+
       <div className={`${styles.categories} ${styles.animate}`}>
         {[
           { icon: "✦", label: "BRANDING" },
