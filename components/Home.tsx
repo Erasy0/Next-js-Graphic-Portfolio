@@ -1,5 +1,7 @@
 "use client";
 import styles from "./Home.module.css";
+import Link from "next/link";
+
 
 export default function HomeComp() {
   return (
@@ -17,32 +19,12 @@ export default function HomeComp() {
         </div>
       </div>
 
-      <p className={`${styles.subtext} ${styles.animate}`}>
-        I craft meaningful designs and{" "}
-        <strong>build digital experiences</strong>
-        <br />
-        that are <strong>thoughtful</strong>, functional and visually striking.
-      </p>
-
-      <a href="#gallery" className={`${styles.ctaBtn} ${styles.animate}`}>
-        EXPLORE MY WORK <span className={styles.arrow}>↗</span>
-      </a>
+   
+    
 
 
 
-      <div className={`${styles.categories} ${styles.animate}`}>
-        {[
-          { icon: "✦", label: "BRANDING" },
-          { icon: "⊡", label: "UI/UX DESIGN" },
-          { icon: "⊕", label: "WEB DESIGN" },
-          { icon: "▷", label: "MOTION DESIGN" },
-        ].map(({ icon, label }) => (
-          <div key={label} className={styles.pill}>
-            <span className={styles.pillIcon}>{icon}</span>
-            {label}
-          </div>
-        ))}
-      </div>
+      
     </section>
   );
 }
