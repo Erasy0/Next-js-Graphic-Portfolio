@@ -1,8 +1,8 @@
-// app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "../components/Providers";
+import Navbar from "../components/navbar"; // ← add this
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,14 +30,15 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} bg-black h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        {/*
-          Providers is a "use client" boundary.
-          It renders:
-            1. LenisProvider  — attaches smooth scrolling to .snap-container
-            2. ScrollProgressBar — fixed top bar, z-index 9999
-            3. {children}    — the rest of the app
-        */}
-        <Providers>{children}</Providers>
+        <Providers>
+          {/* Navbar floats above the snap container */}
+          <div className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none">
+            <div className="pointer-events-auto">
+              <Navbar />
+            </div>
+          </div>
+          {children}
+        </Providers>
       </body>
     </html>
   );
