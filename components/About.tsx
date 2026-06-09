@@ -47,7 +47,7 @@ const skills = [
     { label: "Brand Identity", pct: 92 },
     { label: "UI / UX Design", pct: 88 },
     { label: "Web Development", pct: 85 },
-    { label: "Motion Design", pct: 78 },
+    { label: "Systems Development", pct: 80 },
     { label: "Typography", pct: 90 },
     { label: "Art Direction", pct: 82 },
 ];
@@ -62,6 +62,44 @@ const tools = [
     { name: "Next.js", icon: "⬢" },
     { name: "TypeScript", icon: "◎" },
     { name: "Tailwind", icon: "⊕" },
+];
+
+/* ── Service tool tags per service ── */
+type ServiceTool = { symbol: string; label: string };
+
+const serviceTools: ServiceTool[][] = [
+    /* 01 — Brand Identity */
+    [
+        { symbol: "Ps", label: "Photoshop" },
+        { symbol: "Ai", label: "Illustrator" },
+        { symbol: "Id", label: "InDesign" },
+        { symbol: "◇", label: "Vector" },
+        { symbol: "⬡", label: "Grids" },
+    ],
+    /* 02 — UI / UX Design */
+    [
+        { symbol: "Fg", label: "Figma" },
+        { symbol: "◈", label: "Components" },
+        { symbol: "⊛", label: "Prototype" },
+        { symbol: "◎", label: "Tokens" },
+        { symbol: "▣", label: "Wireframe" },
+    ],
+    /* 03 — Web Development */
+    [
+        { symbol: "Nx", label: "Next.js" },
+        { symbol: "Ts", label: "TypeScript" },
+        { symbol: "⊕", label: "Tailwind" },
+        { symbol: "⬢", label: "React" },
+        { symbol: "{ }", label: "CSS" },
+    ],
+    /* 04 — Systems Development */
+    [
+        { symbol: "C#", label: "C Sharp" },
+        { symbol: ".N", label: ".NET" },
+        { symbol: "Sq", label: "SQL" },
+        { symbol: "◑", label: "APIs" },
+        { symbol: "⊞", label: "MVC" },
+    ],
 ];
 
 /* ── Services ── */
@@ -83,10 +121,61 @@ const services = [
     },
     {
         number: "04",
-        title: "Motion & Animation",
-        desc: "Purposeful motion that breathes life into interfaces — scroll effects, transitions, and micro-interactions.",
+        title: "Systems Development",
+        desc: "Robust enterprise applications in .NET and C# — procurement systems, workflows, and data-driven backends.",
     },
 ];
+
+/* ── Single service card with hover tool reveal ── */
+function ServiceCard({
+    number,
+    title,
+    desc,
+    toolTags,
+    animClass,
+    delay,
+}: {
+    number: string;
+    title: string;
+    desc: string;
+    toolTags: ServiceTool[];
+    animClass: string;
+    delay: string;
+}) {
+    const [hovered, setHovered] = useState(false);
+
+    return (
+        <div
+            className={`${styles.serviceCard} ${animClass}`}
+            style={{ animationDelay: delay }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+        >
+            <span className={styles.serviceNumber}>{number}</span>
+
+            <div className={styles.serviceContent}>
+                <h4 className={styles.serviceTitle}>{title}</h4>
+                <p className={styles.serviceDesc}>{desc}</p>
+            </div>
+
+            {/* Tool tags — reveal on hover */}
+            <div className={`${styles.kzStage} ${hovered ? styles.kzRing : ""}`}>
+                {toolTags.map(({ symbol, label }, i) => (
+                    <span
+                        key={label}
+                        className={styles.serviceToolTag}
+                        style={{ transitionDelay: `${i * 0.045}s` }}
+                        title={label}
+                    >
+                        {symbol}
+                    </span>
+                ))}
+            </div>
+
+            <span className={`${styles.serviceArrow} ${hovered ? styles.serviceArrowVisible : ""}`}>↗</span>
+        </div>
+    );
+}
 
 export default function About() {
     /* ── Intersection hooks per section ── */
@@ -224,18 +313,15 @@ export default function About() {
 
                 <div className={styles.servicesGrid}>
                     {services.map(({ number, title, desc }, i) => (
-                        <div
+                        <ServiceCard
                             key={`${number}-${servicesSection.animKey}`}
-                            className={`${styles.serviceCard} ${servicesSection.anim}`}
-                            style={{ animationDelay: `${0.15 + i * 0.15}s` }}
-                        >
-                            <span className={styles.serviceNumber}>{number}</span>
-                            <div className={styles.serviceContent}>
-                                <h4 className={styles.serviceTitle}>{title}</h4>
-                                <p className={styles.serviceDesc}>{desc}</p>
-                            </div>
-                            <span className={styles.serviceArrow}>↗</span>
-                        </div>
+                            number={number}
+                            title={title}
+                            desc={desc}
+                            toolTags={serviceTools[i]}
+                            animClass={`${servicesSection.anim}`}
+                            delay={`${0.15 + i * 0.15}s`}
+                        />
                     ))}
                 </div>
             </div>
