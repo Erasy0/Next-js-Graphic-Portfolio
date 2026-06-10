@@ -315,7 +315,7 @@
 .cardWeb   .cardLine { background: #21d4a8; }
 .cardSys   .cardLine { background: #e63f6c; }
 
-/* Number / content / title / desc — unchanged */
+/* Number / content / title / desc */
 .serviceNumber {
     font-family: var(--CalSans, sans-serif);
     font-size: 0.75rem;
@@ -398,6 +398,7 @@
     opacity: 1;
     transform: scale(1) rotate(0deg);
 }
+/* nth-child(2) is the first .kzOrb because .kzRing is child(1) */
 .serviceCard:hover .kzOrb:nth-child(2) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.05s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.05s; }
 .serviceCard:hover .kzOrb:nth-child(3) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.11s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.11s; }
 .serviceCard:hover .kzOrb:nth-child(4) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.17s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.17s; }
@@ -478,11 +479,6 @@
 .serviceArrowVisible {
     color: rgba(255,255,255,0.3);
     transform: translateY(-2px) translateX(1px);
-}
-
-@media (max-width: 768px) {
-    .kzStage { display: none; }
-    .burst   { display: none; }
 }
 
 /* ═══════════════════════════════
@@ -642,7 +638,8 @@
     .toolsGrid    { grid-template-columns: repeat(2, 1fr); }
     .skillsGrid   { grid-template-columns: 1fr; }
     .ctaRow       { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-    .serviceToolRow { display: none; }
+    .kzStage      { display: none; }
+    .burst        { display: none; }
 }
 
 /* ── Mobile (≤ 480px) ── */
