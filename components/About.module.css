@@ -326,7 +326,9 @@
     transition: color 0.25s ease;
 }
 .serviceCard:hover .serviceNumber { color: rgba(255,255,255,0.45); }
+
 .serviceContent { flex: 1; min-width: 0; }
+
 .serviceTitle {
     font-family: var(--CalSans, sans-serif);
     font-size: clamp(1.1rem, 2vw, 1.5rem);
@@ -337,146 +339,41 @@
     background-clip: text;
     transition: background 0.2s, -webkit-text-fill-color 0.2s;
 }
+
+/* ─── Typewriter desc reveal ─── */
 .serviceDesc {
     font-family: var(--JuliusSansOne, sans-serif);
     font-size: 0.8rem;
     line-height: 1.7;
-    color: rgba(255,255,255,0.35);
+    color: transparent;
     margin: 0;
-    max-width: 50ch;
+    max-width: 0;
     letter-spacing: 0.04em;
-}
-
-/* ─── KZ Orbital tool stage ─── */
-.kzStage {
-    position: relative;
-    width: 130px;
-    height: 64px;
-    flex-shrink: 0;
-    overflow: visible;
-}
-
-.kzRing {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 0; height: 0;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.3s;
-}
-.kzRing::before {
-    content: '';
-    position: absolute;
-    border-radius: 50%;
-    border: 1px dashed rgba(255,255,255,0.06);
-    transform: translate(-50%,-50%);
-    width: 0; height: 0;
-    transition: width 0s, height 0s;
-}
-.serviceCard:hover .kzRing { opacity: 1; }
-.serviceCard:hover .kzRing::before {
-    width: 120px; height: 40px;
-    animation: ringExpand 0.5s cubic-bezier(0.22,1,0.36,1) forwards;
-}
-@keyframes ringExpand {
-    from { width: 0; height: 0; }
-    to   { width: 120px; height: 40px; }
-}
-
-/* Hex gem orb */
-.kzOrb {
-    position: absolute;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 3px;
-    opacity: 0;
-    transform: scale(0) rotate(-20deg);
-    transition: opacity 0s, transform 0s;
-}
-.serviceCard:hover .kzOrb {
-    opacity: 1;
-    transform: scale(1) rotate(0deg);
-}
-/* nth-child(2) is the first .kzOrb because .kzRing is child(1) */
-.serviceCard:hover .kzOrb:nth-child(2) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.05s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.05s; }
-.serviceCard:hover .kzOrb:nth-child(3) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.11s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.11s; }
-.serviceCard:hover .kzOrb:nth-child(4) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.17s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.17s; }
-.serviceCard:hover .kzOrb:nth-child(5) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.23s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.23s; }
-.serviceCard:hover .kzOrb:nth-child(6) { transition: opacity 0.38s cubic-bezier(0.22,1,0.36,1) 0.29s, transform 0.38s cubic-bezier(0.22,1,0.36,1) 0.29s; }
-
-.orbGem {
-    width: 28px; height: 28px;
-    clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--CalSans, sans-serif);
-    font-size: 8.5px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    transition: transform 0.2s cubic-bezier(0.22,1,0.36,1);
-}
-.kzOrb:hover .orbGem { transform: scale(1.15) translateY(-2px); }
-
-.cardBrand .orbGem { background: #f5a623; color: #3d2800; }
-.cardUi    .orbGem { background: #7b5cf5; color: #fff; }
-.cardWeb   .orbGem { background: #21d4a8; color: #003326; }
-.cardSys   .orbGem { background: #e63f6c; color: #fff; }
-
-.orbLabel {
-    font-family: var(--JuliusSansOne, sans-serif);
-    font-size: 7px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
+    overflow: hidden;
     white-space: nowrap;
 }
-.cardBrand .orbLabel { color: rgba(245,166,35,0.65); }
-.cardUi    .orbLabel { color: rgba(123,92,245,0.65); }
-.cardWeb   .orbLabel { color: rgba(33,212,168,0.65); }
-.cardSys   .orbLabel { color: rgba(230,63,108,0.65); }
 
-/* Particle burst */
-.burst {
-    position: absolute;
-    top: 50%;
-    right: 148px;
-    pointer-events: none;
-}
-.burstDot {
-    position: absolute;
-    width: 3px; height: 3px;
-    border-radius: 50%;
-    opacity: 0;
-    transform: translate(-50%,-50%) scale(0);
-}
-.cardBrand .burstDot { background: #f5a623; }
-.cardUi    .burstDot { background: #7b5cf5; }
-.cardWeb   .burstDot { background: #21d4a8; }
-.cardSys   .burstDot { background: #e63f6c; }
-
-.serviceCard:hover .burstDot { animation: particlePop 0.55s cubic-bezier(0.22,1,0.36,1) forwards; }
-.serviceCard:hover .burstDot:nth-child(1) { animation-delay: 0.02s; --tx: -14px; --ty: -10px; }
-.serviceCard:hover .burstDot:nth-child(2) { animation-delay: 0.05s; --tx: 12px;  --ty: -12px; }
-.serviceCard:hover .burstDot:nth-child(3) { animation-delay: 0.08s; --tx: -10px; --ty: 12px; }
-.serviceCard:hover .burstDot:nth-child(4) { animation-delay: 0.11s; --tx: 14px;  --ty: 8px; }
-.serviceCard:hover .burstDot:nth-child(5) { animation-delay: 0.14s; --tx: 0px;   --ty: -16px; }
-.serviceCard:hover .burstDot:nth-child(6) { animation-delay: 0.06s; --tx: 16px;  --ty: -4px; }
-
-@keyframes particlePop {
-    0%   { opacity: 0; transform: translate(-50%,-50%) scale(0); }
-    30%  { opacity: 1; transform: translate(calc(-50% + var(--tx)*0.4), calc(-50% + var(--ty)*0.4)) scale(1.4); }
-    100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(0.5); }
+.serviceCard:hover .serviceDesc {
+    animation: typeReveal 0.65s steps(50, end) forwards,
+               descFadeIn 0.05s linear forwards;
 }
 
-/* Arrow */
+@keyframes typeReveal {
+    from { max-width: 0; }
+    to   { max-width: 100ch; }
+}
+
+@keyframes descFadeIn {
+    to { color: rgba(255,255,255,0.35); }
+}
+/* ─── Arrow ─── */
 .serviceArrow {
     font-size: 1.2rem;
     color: rgba(255,255,255,0);
     flex-shrink: 0;
-    transition: opacity 0.25s ease, transform 0.25s ease, color 0.25s ease;
+    transition: color 0.25s ease, transform 0.25s ease;
 }
-.serviceArrowVisible {
+.serviceCard:hover .serviceArrow {
     color: rgba(255,255,255,0.3);
     transform: translateY(-2px) translateX(1px);
 }
@@ -638,8 +535,13 @@
     .toolsGrid    { grid-template-columns: repeat(2, 1fr); }
     .skillsGrid   { grid-template-columns: 1fr; }
     .ctaRow       { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
-    .kzStage      { display: none; }
-    .burst        { display: none; }
+  .serviceDesc {
+        white-space: normal;
+        max-width: 50ch;
+        width: auto;
+        color: rgba(255,255,255,0.35);
+        animation: none !important;
+    }
 }
 
 /* ── Mobile (≤ 480px) ── */

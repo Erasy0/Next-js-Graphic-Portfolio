@@ -64,44 +64,6 @@ const tools = [
     { name: "Tailwind", icon: "⊕" },
 ];
 
-/* ── Service tool tags per service ── */
-type ServiceTool = { symbol: string; label: string };
-
-const serviceTools: ServiceTool[][] = [
-    /* 01 — Brand Identity */
-    [
-        { symbol: "Ps", label: "Photoshop" },
-        { symbol: "Ai", label: "Illustrator" },
-        { symbol: "Id", label: "InDesign" },
-        { symbol: "◇", label: "Vector" },
-        { symbol: "⬡", label: "Grids" },
-    ],
-    /* 02 — UI / UX Design */
-    [
-        { symbol: "Fg", label: "Figma" },
-        { symbol: "◈", label: "Components" },
-        { symbol: "⊛", label: "Prototype" },
-        { symbol: "◎", label: "Tokens" },
-        { symbol: "▣", label: "Wireframe" },
-    ],
-    /* 03 — Web Development */
-    [
-        { symbol: "Nx", label: "Next.js" },
-        { symbol: "Ts", label: "TypeScript" },
-        { symbol: "⊕", label: "Tailwind" },
-        { symbol: "⬢", label: "React" },
-        { symbol: "{ }", label: "CSS" },
-    ],
-    /* 04 — Systems Development */
-    [
-        { symbol: "C#", label: "C Sharp" },
-        { symbol: ".N", label: ".NET" },
-        { symbol: "Sq", label: "SQL" },
-        { symbol: "◑", label: "APIs" },
-        { symbol: "⊞", label: "MVC" },
-    ],
-];
-
 /* ── Services ── */
 const services = [
     {
@@ -126,59 +88,40 @@ const services = [
     },
 ];
 
-/* ── Single service card with hover tool reveal ── */
+/* ── Service card with typewriter desc reveal on hover ── */
 function ServiceCard({
     number,
     title,
     desc,
-    toolTags,
     animClass,
     delay,
+    cardVariant,
 }: {
     number: string;
     title: string;
     desc: string;
-    toolTags: ServiceTool[];
     animClass: string;
     delay: string;
+    cardVariant: string;
 }) {
-    const [hovered, setHovered] = useState(false);
-
     return (
         <div
-            className={`${styles.serviceCard} ${animClass}`}
+            className={`${styles.serviceCard} ${styles[cardVariant]} ${animClass}`}
             style={{ animationDelay: delay }}
-            onMouseEnter={() => setHovered(true)}
-            onMouseLeave={() => setHovered(false)}
         >
+            <div className={styles.cardSweep} />
+            <div className={styles.cardLine} />
             <span className={styles.serviceNumber}>{number}</span>
-
             <div className={styles.serviceContent}>
                 <h4 className={styles.serviceTitle}>{title}</h4>
                 <p className={styles.serviceDesc}>{desc}</p>
             </div>
-
-            {/* Tool tags — reveal on hover */}
-            <div className={`${styles.kzStage} ${hovered ? styles.kzRing : ""}`}>
-                {toolTags.map(({ symbol, label }, i) => (
-                    <span
-                        key={label}
-                        className={styles.serviceToolTag}
-                        style={{ transitionDelay: `${i * 0.045}s` }}
-                        title={label}
-                    >
-                        {symbol}
-                    </span>
-                ))}
-            </div>
-
-            <span className={`${styles.serviceArrow} ${hovered ? styles.serviceArrowVisible : ""}`}>↗</span>
+            <span className={styles.serviceArrow}>↗</span>
         </div>
     );
 }
 
 export default function About() {
-    /* ── Intersection hooks per section ── */
     const heroSection = useScrollAnim();
     const skillsSection = useScrollAnim();
     const servicesSection = useScrollAnim();
@@ -318,9 +261,9 @@ export default function About() {
                             number={number}
                             title={title}
                             desc={desc}
-                            toolTags={serviceTools[i]}
                             animClass={`${servicesSection.anim}`}
                             delay={`${0.15 + i * 0.15}s`}
+                            cardVariant={["cardBrand", "cardUi", "cardWeb", "cardSys"][i]}
                         />
                     ))}
                 </div>
@@ -363,19 +306,6 @@ export default function About() {
                     className={`${styles.divider} ${toolsSection.anim}`}
                     style={{ animationDelay: "0.8s" }}
                 />
-
-                <div
-                    key={`tl-cta-${toolsSection.animKey}`}
-                    className={`${styles.ctaRow} ${toolsSection.anim}`}
-                    style={{ animationDelay: "1s" }}
-                >
-                    <p className={styles.ctaText}>
-                        Ready to build something memorable?
-                    </p>
-                    <a href="#contact" className={styles.ctaBtn}>
-                        LET&apos;S TALK <span className={styles.ctaArrow}>↗</span>
-                    </a>
-                </div>
             </div>
         </div>
     );

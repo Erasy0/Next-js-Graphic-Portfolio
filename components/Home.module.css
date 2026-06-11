@@ -62,7 +62,7 @@
 }
 
 .year {
-  font-size: clamp(4rem, 12vw, 9rem);
+  font-size: clamp(6rem, 14vw, 11rem);
   line-height: 0.9;
   font-family: var(--CalSans);
   background: linear-gradient(280deg, #e2e2e2 41%, #e9e9e9 28%, #363636 55%, #000 100%);

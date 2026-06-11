@@ -9,7 +9,6 @@ export default function Navbar() {
                     <li className={styles.NavItem}><a href="#home">Home</a></li>
                     <li className={styles.NavItem}><a href="#gallery">Projects</a></li>
                     <li className={styles.NavItem}><a href="#about">About</a></li>
-                    <li className={styles.NavItem}><a href="#contact">Contact</a></li>
                 </ul>
             </nav>
         </>
