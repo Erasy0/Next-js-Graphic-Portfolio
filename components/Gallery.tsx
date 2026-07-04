@@ -127,7 +127,8 @@ const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p35", "FOOTBALL GRAPHICS",  "Luis Suarez Poster", "FC Barcelona Poster", "A stats poster for Luis Suarez.", ["/Images/Luiz suarez poster-smaller.webp"]),
   proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC Poster", "A graphic poster for Malo Gusto showcasing his stats for Chelsea FC.", ["/Images/Malo gusto image compressed.webp"]),
   proj("p37", "FOOTBALL GRAPHICS",  "Portugal 2026 Graphic Poster", "Portugal FA", "A graphic poster for the Portugal 2026 World Cup. squad", ["/Images/Cristiano ronaldo Portugal poster.webp"]),
-  proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster.webp"]),
+  proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster-3.webp"]),
+  proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"]),
 ];
 
 
