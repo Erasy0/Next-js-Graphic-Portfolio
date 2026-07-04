@@ -8,20 +8,23 @@ import styles from "./Gallery.module.css";
 // ─── Types ────────────────────────────────────────────────────────────────────
 export type GalleryItem = {
   id: string;
-  category: "PHOTO MANIPLATION" | "UI/UX DESIGN" | "WEB DESIGN" | "ANIME GRAPHICS" | "CAR GRAPHICS" | "GAME GRAPHICS" | "BRANDING" | "FOOTBALL GRAPHICS";
+  category: "PHOTO MANIPLATION" | "UI/UX DESIGN" |  "ANIME GRAPHICS" | "CAR GRAPHICS" | "GAME GRAPHICS" | "BRANDING" | "FOOTBALL GRAPHICS";
   title: string;
   sub: string;
   description?: string;
   images: string[];
   accent: string;
   bg: string;
+  /** Optional external link (e.g. a live website) shown as a button in the modal */
+  link?: string;
+  /** Show a "not built for mobile" notice next to the link in the modal */
+  mobileWarning?: boolean;
 };
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 const CATEGORY_LIST = [
   "PHOTO MANIPLATION",
   "UI/UX DESIGN",
-  "WEB DESIGN",
   "ANIME GRAPHICS",
   "CAR GRAPHICS",
   "GAME GRAPHICS",
@@ -34,7 +37,6 @@ const CATEGORY_ICONS: Record<string, string> = {
   "PHOTO MANIPLATION": "✦",
   "PHOTO MANIPULATION": "✦",
   "UI/UX DESIGN": "⊡",
-  "WEB DESIGN": "⊕",
   "ANIME GRAPHICS": "⛩",
   "CAR GRAPHICS": "◎",
   "GAME GRAPHICS": "⚔",
@@ -46,7 +48,6 @@ const CATEGORY_ACCENTS: Record<string, string> = {
   "PHOTO MANIPLATION": "#c084fc",
   "PHOTO MANIPULATION": "#c084fc",
   "UI/UX DESIGN": "#38bdf8",
-  "WEB DESIGN": "#34d399",
   "ANIME GRAPHICS": "#f472b6",
   "CAR GRAPHICS": "#fb923c",
   "GAME GRAPHICS": "#facc15",
@@ -73,7 +74,8 @@ function proj(
   title: string,
   sub: string,
   description: string,
-  images: string[]
+  images: string[],
+  extra?: { link?: string; mobileWarning?: boolean }
 ): GalleryItem {
   return {
     id,
@@ -84,6 +86,8 @@ function proj(
     images,
     accent: CATEGORY_ACCENTS[category] ?? "#ffffff",
     bg: CATEGORY_BGS[category] ?? "#0a0a0a",
+    link: extra?.link,
+    mobileWarning: extra?.mobileWarning,
   };
 }
 
@@ -129,6 +133,8 @@ const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p37", "FOOTBALL GRAPHICS",  "Portugal 2026 Graphic Poster", "Portugal FA", "A graphic poster for the Portugal 2026 World Cup. squad", ["/Images/Cristiano ronaldo Portugal poster.webp"]),
   proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster-3.webp"]),
   proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"]),
+  proj("p40", "UI/UX DESIGN",  "Green Hydrogen Analytics Post Analysis", "Green Hydrogen Analytics Post", "A poster for analyzing a post about green hydrogen.", ["/Images/Green Hydrogen UIUX Design.webp"]),
+  
 ];
 
 
@@ -571,6 +577,10 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
 }
 
 // ─── Modal Component ──────────────────────────────────────────────────────────
+// Every image renders fully contained (scaled to fit, no cropping, no internal
+// scroll) — the same simple box for every project and category, so the modal
+// always looks consistent (title/category/description always visible below).
+
 function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void }) {
   const stripRef = useRef<HTMLDivElement>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -580,6 +590,8 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
   const touchStartXRef = useRef(0);
   const touchStartYRef = useRef(0);
   const isTouchScrollRef = useRef(false);
+  // UI/UX Design projects get a larger image area in the modal.
+  const isUiUx = project.category === "UI/UX DESIGN";
 
   const updateImageIndex = useCallback(() => {
     if (stripRef.current) {
@@ -632,7 +644,7 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
   return (
     <div className={styles.modalBackdrop} onClick={onClose}>
       <div
-        className={styles.modal}
+        className={`${styles.modal} ${isUiUx ? styles.modalUiux : ""}`}
         onClick={(e) => e.stopPropagation()}
         onTouchStart={handleModalTouchStart}
         onTouchMove={handleModalTouchMove}
@@ -649,13 +661,16 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
             }}
           >
             {project.images.map((src, idx) => (
-              <img
-                key={idx}
-                src={src}
-                alt={`${project.title} - ${idx + 1}`}
-                className={styles.modalImg}
-                draggable={false}
-              />
+              <div className={styles.modalImgSlide} key={idx}>
+                <div className={styles.modalImgFrame}>
+                  <img
+                    src={src}
+                    alt={`${project.title} - ${idx + 1}`}
+                    className={styles.modalImg}
+                    draggable={false}
+                  />
+                </div>
+              </div>
             ))}
           </div>
           {project.images.length > 1 && (
@@ -673,6 +688,28 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
           <p className={styles.modalSub}>{project.sub}</p>
           {project.description && (
             <p className={styles.modalDesc}>{project.description}</p>
+          )}
+          {(project.link || project.mobileWarning) && (
+            <div className={styles.modalLinkWrap} data-no-drag="true">
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={styles.modalLinkBtn}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <span className={styles.modalLinkIcon}>🔗</span>
+                  Visit Website
+                </a>
+              )}
+              {project.mobileWarning && (
+                <span className={styles.modalMobileWarning}>
+                  <span className={styles.modalMobileWarningIcon}>⚠</span>
+                  Not built for mobile — best viewed on desktop
+                </span>
+              )}
+            </div>
           )}
           {project.images.length > 1 && (
             <p className={styles.modalSwipeHint}>← SWIPE TO EXPLORE MORE →</p>

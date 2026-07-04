@@ -733,19 +733,118 @@
 .modalImgStrip::-webkit-scrollbar { display: none; }
 .modalImgStrip:active { cursor: grabbing; }
 
-.modalImg {
+/* Each image in the strip lives inside a slide wrapper. This lets a single
+   image switch to an internal vertical-scroll layout (for very tall images)
+   without disturbing the horizontal swipe/snap behaviour of the strip. */
+.modalImgSlide {
   flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: start;
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.modalImgFrame {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tall images (e.g. long UI/UX screenshots) get their own vertical scroll
+   area instead of being squashed down to fit — with a visible scrollbar. */
+.modalImgFrameTall {
+  align-items: flex-start;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 55vh;
+  border-radius: 16px;
+  background: #0a0a0a;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
+}
+
+.modalImgFrameTall::-webkit-scrollbar { width: 6px; }
+.modalImgFrameTall::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 10px;
+}
+.modalImgFrameTall::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+.modalImgFrameTall::-webkit-scrollbar-track { background: transparent; }
+
+.modalImg {
   width: 100%;
   height: auto;
   max-height: 55vh;
   object-fit: contain;
-  scroll-snap-align: start;
   display: block;
   pointer-events: none;
   border-radius: 16px;
   background: #0a0a0a;
   padding: 0.25rem;
   box-sizing: border-box;
+}
+
+/* The tall-image variant: full width, natural height (scaled to width),
+   scrollable within its .modalImgFrameTall parent above. */
+.modalImgTallEl {
+  width: 100%;
+  height: auto;
+  display: block;
+  pointer-events: auto;
+  border-radius: 16px;
+  background: #0a0a0a;
+}
+
+/* Floating "scroll for more" cue shown over tall images until the user
+   scrolls (or a few seconds pass), then fades out. */
+.scrollCue {
+  position: absolute;
+  bottom: 14px;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.4rem 0.9rem;
+  border-radius: 30px;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  pointer-events: none;
+  z-index: 5;
+  animation: scrollCueBounce 1.6s ease-in-out infinite;
+  transition: opacity 0.4s ease;
+}
+
+.scrollCueHidden {
+  opacity: 0;
+}
+
+@keyframes scrollCueBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+/* UI/UX Design projects get a noticeably bigger image area in the modal */
+.modalUiux {
+  max-width: 1200px;
+}
+
+.modalUiux .modalImg,
+.modalUiux .modalImgFrameTall {
+  max-height: 66vh;
 }
 
 .modalImageCounter {
@@ -818,6 +917,67 @@
   font-weight: 400;
 }
 
+/* ─── Modal Link + Mobile Warning ────────────────────────────────────────────── */
+.modalLinkWrap {
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.modalLinkBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.modalLinkBtn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #ffffff;
+}
+
+.modalLinkBtn:active {
+  transform: scale(0.97);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.modalLinkIcon {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.modalMobileWarning {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: rgba(250, 204, 21, 0.85);
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.modalMobileWarningIcon {
+  flex-shrink: 0;
+  font-size: 0.68rem;
+}
+
 /* ══════════════════════════════════════════════════════════════════════════════
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════════════════════════════════════════════ */
@@ -826,6 +986,9 @@
 @media (max-width: 1024px) {
   .modalImg      { max-height: 58vh; }
   .modalTitle    { font-size: 1.4rem; }
+
+  .modalUiux .modalImg,
+  .modalUiux .modalImgFrameTall { max-height: 64vh; }
 }
 
 /* ── Tablet portrait ─── */
@@ -853,6 +1016,12 @@
   .modalTitle  { font-size: 1.3rem; }
   .modalInfo   { padding: 0.8rem 1.2rem 1.2rem; }
   .modalImageCounter { bottom: 15px; right: 20px; padding: 0.3rem 0.8rem; font-size: 0.6rem; }
+
+  .modalUiux .modalImg,
+  .modalUiux .modalImgFrameTall { max-height: 60vh; }
+
+  .modalLinkBtn { padding: 0.45rem 0.9rem; font-size: 0.68rem; }
+  .modalMobileWarning { font-size: 0.58rem; }
 }
 
 /* ── Mobile landscape / large phone ─── */
@@ -915,6 +1084,15 @@
   .closeBtn    { top: 14px; right: 14px; width: 34px; height: 34px; font-size: 0.8rem; }
   .modalImageCounter { bottom: 12px; right: 15px; padding: 0.25rem 0.7rem; font-size: 0.55rem; }
 
+  .modalUiux .modalImg,
+  .modalUiux .modalImgFrameTall { max-height: 50vh; }
+
+  .scrollCue { font-size: 0.6rem; padding: 0.35rem 0.75rem; bottom: 10px; }
+
+  .modalLinkWrap { margin-top: 0.7rem; padding-top: 0.7rem; gap: 0.45rem; }
+  .modalLinkBtn { padding: 0.45rem 0.85rem; font-size: 0.66rem; }
+  .modalMobileWarning { font-size: 0.56rem; }
+
   /* Dropdown: position from left on mobile */
   .dropdown { left: 0; right: auto; }
 }
@@ -942,6 +1120,12 @@
   .modalSub    { font-size: 0.7rem; }
   .modalDesc   { font-size: 0.8rem; }
   .modalInfo   { gap: 0.2rem; }
+
+  .modalUiux .modalImg,
+  .modalUiux .modalImgFrameTall { max-height: 46vh; }
+
+  .modalLinkBtn { padding: 0.42rem 0.8rem; font-size: 0.64rem; }
+  .modalMobileWarning { font-size: 0.55rem; }
 }
 
 /* ── Very small phone ─── */
@@ -960,7 +1144,8 @@
   .infoPanel,
   .modal,
   .modalBackdrop,
-  .shimmerRing {
+  .shimmerRing,
+  .scrollCue {
     transition: none !important;
     animation: none !important;
   }
