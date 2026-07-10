@@ -134,7 +134,7 @@ const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster-3.webp"]),
   proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"]),
   proj("p40", "UI/UX DESIGN",  "Green Hydrogen Analytics Post Analysis", "Green Hydrogen Analytics Post", "A poster for analyzing a post about green hydrogen.", ["/Images/Green Hydrogen UIUX Design.webp"]),
-  
+    proj("p41", "ANIME GRAPHICS",  "Drian Poster ", "Burning effect", "A poster for Drian from the Korean manhwa` burning effect.", ["/Images/Drian Poster.webp"]),
 ];
 
 
@@ -152,22 +152,33 @@ function getCoverflowTransform(offset: number, cardWidth: number, isMobile: bool
     };
   }
 
-  const direction = Math.sign(offset);
-  // Tighter spacing on mobile so side cards peek in nicely
-  const SPACING = isMobile ? cardWidth * 0.68 : cardWidth * 0.85;
-  const translateX = direction * absOffset * SPACING;
+  if (isMobile) {
+    const translateX = offset * cardWidth * 0.9;
+    const scale = absOffset === 0 ? 1 : 0.84;
+    const opacity = absOffset === 0 ? 1 : 0.56;
 
-  const MAX_ROTATION = isMobile ? 15 : 25;
+    return {
+      transform: `translate3d(${translateX}px, 0, 0) scale(${scale})`,
+      opacity,
+      zIndex: absOffset === 0 ? 20 : 10,
+      pointerEvents: absOffset === 0 ? "auto" as const : "none" as const,
+    };
+  }
+
+  const direction = Math.sign(offset);
+  const SPACING = cardWidth * 0.85;
+  const translateX = direction * absOffset * SPACING;
+  const MAX_ROTATION = 25;
   const rotation = direction * Math.min(absOffset * 12, MAX_ROTATION);
 
   let scale = 1;
-  if (absOffset === 1) scale = isMobile ? 0.72 : 0.75;
+  if (absOffset === 1) scale = 0.75;
   else if (absOffset === 2) scale = 0.55;
 
   const translateZ = -absOffset * 35;
 
   let opacity = 1;
-  if (absOffset === 1) opacity = isMobile ? 0.55 : 0.75;
+  if (absOffset === 1) opacity = 0.75;
   else if (absOffset === 2) opacity = 0.45;
 
   const zIndex = 10 - absOffset;
@@ -268,9 +279,14 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
   }
 
   useEffect(() => {
+    if (isMobile) {
+      stopAuto();
+      return;
+    }
+
     startAuto();
     return stopAuto;
-  }, [totalItems]);
+  }, [totalItems, isMobile]);
 
   // Navigation
   const goToPrevious = useCallback(() => {
@@ -491,6 +507,9 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
         {/* Coverflow Track */}
         <div className={styles.coverflowTrack}>
           {filtered.map((project, idx) => {
+            const shouldRender = !isMobile || Math.abs(idx - activeIndex) <= 1;
+            if (!shouldRender) return null;
+
             const offset = idx - activeIndex;
             const transform = getCoverflowTransform(offset, cardWidth, isMobile);
             const isActive = offset === 0;
@@ -517,17 +536,23 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
                   alt={project.title}
                   className={styles.cfCardImg}
                   draggable={false}
+                  loading={isMobile ? "eager" : "lazy"}
+                  decoding="async"
                 />
                 <div className={styles.cfCardOverlay} />
                 {isActive && <div className={styles.shimmerRing} />}
-                <div className={styles.cfCardReflection}>
-                  <img
-                    src={project.images[0]}
-                    alt=""
-                    className={styles.cfCardReflectionImg}
-                    draggable={false}
-                  />
-                </div>
+                {!isMobile && (
+                  <div className={styles.cfCardReflection}>
+                    <img
+                      src={project.images[0]}
+                      alt=""
+                      className={styles.cfCardReflectionImg}
+                      draggable={false}
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )}
               </div>
             );
           })}

@@ -118,7 +118,7 @@
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     padding: 1.5px;
-    animation: spin 5s linear infinite;
+    animation: none;
     pointer-events: none;
     z-index: -1;
     opacity: 0.7;
@@ -128,28 +128,57 @@
     to { --angle: 360deg; }
 }
 
-/* ── Hover: glass tilts toward light ── */
-.Navbar:hover {
-    background: linear-gradient(
-        160deg,
-        rgba(255, 255, 255, 0.20) 0%,
-        rgba(255, 255, 255, 0.07) 35%,
-        rgba(180, 200, 255, 0.09) 65%,
-        rgba(255, 255, 255, 0.15) 100%
-    );
-    box-shadow:
-        inset 0 2.5px 0 rgba(255, 255, 255, 0.85),
-        inset 0 1px 0 rgba(255, 255, 255, 0.55),
-        inset 0 0 24px rgba(255, 255, 255, 0.06),
-        inset 0 -1.5px 0 rgba(255, 255, 255, 0.24),
-        inset 2px 0 0 rgba(255, 255, 255, 0.36),
-        inset -2px 0 0 rgba(0, 0, 0, 0.14),
-        0 12px 48px rgba(0, 0, 0, 0.42),
-        0 4px 14px rgba(0, 0, 0, 0.24),
-        0 0 0 1px rgba(180, 210, 255, 0.28),
-        0 1px 0 rgba(255, 220, 180, 0.18);
-    filter: drop-shadow(0 6px 32px rgba(0, 0, 0, 0.5));
-    transform: translateY(-1px);
+@media (hover: hover) and (pointer: fine) {
+    .Navbar::after {
+        animation: spin 5s linear infinite;
+    }
+
+    /* ── Hover: glass tilts toward light ── */
+    .Navbar:hover {
+        background: linear-gradient(
+            160deg,
+            rgba(255, 255, 255, 0.20) 0%,
+            rgba(255, 255, 255, 0.07) 35%,
+            rgba(180, 200, 255, 0.09) 65%,
+            rgba(255, 255, 255, 0.15) 100%
+        );
+        box-shadow:
+            inset 0 2.5px 0 rgba(255, 255, 255, 0.85),
+            inset 0 1px 0 rgba(255, 255, 255, 0.55),
+            inset 0 0 24px rgba(255, 255, 255, 0.06),
+            inset 0 -1.5px 0 rgba(255, 255, 255, 0.24),
+            inset 2px 0 0 rgba(255, 255, 255, 0.36),
+            inset -2px 0 0 rgba(0, 0, 0, 0.14),
+            0 12px 48px rgba(0, 0, 0, 0.42),
+            0 4px 14px rgba(0, 0, 0, 0.24),
+            0 0 0 1px rgba(180, 210, 255, 0.28),
+            0 1px 0 rgba(255, 220, 180, 0.18);
+        filter: drop-shadow(0 6px 32px rgba(0, 0, 0, 0.5));
+        transform: translateY(-1px);
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .Navbar {
+        transform: none;
+        filter: none;
+    }
+
+    .Navbar::after {
+        animation: none;
+        opacity: 0.35;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .Navbar::after,
+    .Navbar,
+    .NavList a,
+    .NavList a::after {
+        animation: none !important;
+        transition-duration: 0.01ms !important;
+        transition-delay: 0s !important;
+    }
 }
 
 /* ─── Nav List ─── */
@@ -197,16 +226,25 @@
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.NavList a:hover {
-    color: #ffffff;
-    transform: scale(1.07) translateY(-1px);
-    text-shadow:
-        0 1px 3px rgba(0, 0, 0, 0.35),
-        0 0 22px rgba(255, 255, 255, 0.45);
+@media (hover: hover) and (pointer: fine) {
+    .NavList a:hover {
+        color: #ffffff;
+        transform: scale(1.07) translateY(-1px);
+        text-shadow:
+            0 1px 3px rgba(0, 0, 0, 0.35),
+            0 0 22px rgba(255, 255, 255, 0.45);
+    }
+
+    .NavList a:hover::after {
+        transform: translateX(-50%) scaleX(1);
+    }
 }
 
-.NavList a:hover::after {
-    transform: translateX(-50%) scaleX(1);
+@media (hover: none) and (pointer: coarse) {
+    .NavList a:active {
+        color: #ffffff;
+        transform: scale(0.98);
+    }
 }
 
 /* ─── Blur mask (behind navbar) ─── */

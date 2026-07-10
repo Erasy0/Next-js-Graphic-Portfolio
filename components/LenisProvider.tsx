@@ -69,7 +69,6 @@ export default function LenisProvider({ children }: LenisProviderProps) {
       duration: 1.2,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      smoothTouch: false,
       touchMultiplier: 1.5,
       wheelMultiplier: 0.8,
       infinite: false,
@@ -98,7 +97,7 @@ export default function LenisProvider({ children }: LenisProviderProps) {
         
         const scrollTop = wrapper.scrollTop;
         const viewportHeight = window.innerHeight;
-        const sections = Array.from(document.querySelectorAll(".snap-section"));
+        const sections = Array.from(document.querySelectorAll<HTMLElement>(".snap-section"));
         
         if (sections.length === 0) return;
         
@@ -114,7 +113,7 @@ export default function LenisProvider({ children }: LenisProviderProps) {
         }
         
         // Find the closest section (only for full-height sections)
-        let closestSection = null;
+        let closestSection: Element | null = null;
         let closestDistance = Infinity;
         
         sections.forEach((section) => {
