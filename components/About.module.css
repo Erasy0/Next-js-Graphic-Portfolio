@@ -352,12 +352,51 @@
     overflow: hidden;
     white-space: nowrap;
 }
+.serviceDescWrap {
+    position: relative;
+}
+
+.serviceHint {
+    position: absolute;
+    left: 0;
+    top: 0;
+    display: none;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--JuliusSansOne, sans-serif);
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.28);
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.serviceHintIcon {
+    display: inline-block;
+}
+
+@media (hover: hover) {
+    .serviceHint {
+        display: inline-flex;
+        animation: hintPulse 1.8s ease-in-out infinite;
+    }
+    .serviceCard:hover .serviceHint {
+        opacity: 0;
+        animation: none;
+    }
+}
+
+@keyframes hintPulse {
+    0%, 100% { opacity: 0.35; }
+    50%      { opacity: 0.85; }
+}
+
 
 .serviceCard:hover .serviceDesc {
     animation: typeReveal 0.65s steps(50, end) forwards,
                descFadeIn 0.05s linear forwards;
 }
-
 @keyframes typeReveal {
     from { max-width: 0; }
     to   { max-width: 100ch; }
@@ -369,13 +408,26 @@
 /* ─── Arrow ─── */
 .serviceArrow {
     font-size: 1.2rem;
-    color: rgba(255,255,255,0);
+    color: rgba(255,255,255,0.16);   /* was rgba(255,255,255,0) */
     flex-shrink: 0;
     transition: color 0.25s ease, transform 0.25s ease;
 }
 .serviceCard:hover .serviceArrow {
     color: rgba(255,255,255,0.3);
     transform: translateY(-2px) translateX(1px);
+    animation: none;   /* add this line so the hover transform isn't overridden by the idle nudge */
+}
+
+
+@media (hover: hover) {
+    .serviceArrow {
+        animation: arrowNudge 2.2s ease-in-out infinite;
+    }
+}
+
+@keyframes arrowNudge {
+    0%, 50%, 100% { transform: translateX(0); }
+    25%           { transform: translateX(4px); }
 }
 
 /* ═══════════════════════════════

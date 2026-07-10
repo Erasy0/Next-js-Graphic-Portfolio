@@ -114,13 +114,18 @@ function ServiceCard({
             <span className={styles.serviceNumber}>{number}</span>
             <div className={styles.serviceContent}>
                 <h4 className={styles.serviceTitle}>{title}</h4>
-                <p className={styles.serviceDesc}>{desc}</p>
+                <div className={styles.serviceDescWrap}>
+                    <p className={styles.serviceDesc}>{desc}</p>
+                    <span className={styles.serviceHint}>
+                        <span className={styles.serviceHintIcon}>↦</span>
+                        Hover to reveal
+                    </span>
+                </div>
             </div>
             <span className={styles.serviceArrow}>↗</span>
         </div>
     );
 }
-
 export default function About() {
     const heroSection = useScrollAnim();
     const skillsSection = useScrollAnim();

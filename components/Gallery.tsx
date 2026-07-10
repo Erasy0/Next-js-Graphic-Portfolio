@@ -95,41 +95,41 @@ function proj(
 // ─── Default projects ─────────────────────────────────────────────────────────
 const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p1",  "PHOTO MANIPLATION",  "Baby Jellys", "Photo Manipulation & Digital Art", "My first ever work with Photoshop.", ["/Images/Baby jellys compressed.webp"]),
-  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC Player Poster", "A Match Day poster of Reece James for Chelsea FC.", ["/Images/Reeece James compressed.webp"]),
-  proj("p3",  "FOOTBALL GRAPHICS",  "Antony Poster", "Real Betis Player Poster", "A graphic poster for Antony at Real Betis.", ["/Images/Antony poster psd-Smaller.webp"]),
-  proj("p4",  "FOOTBALL GRAPHICS",  "Jude Bellingham Poster", "England Poster", "A graphic poster of Jude Bellingham.", ["/Images/Jude Poster-Second Version.webp"]),
-  proj("p5",  "ANIME GRAPHICS",     "Sin Jin Woo Poster", "Solo Leveling Poster", "A graphic poster for Sin Jin Woo from the Korean comic Solo Leveling.", ["/Images/Sun jin woo poster 2.webp"]),
-  proj("p6",  "ANIME GRAPHICS",     "Sun Suho Poster", "Solo Leveling Ragnarok Poster", "A graphic poster for Sun Suho from the Korean comic Solo Leveling Ragnarok.", ["/Images/Sung suho poster 2.webp"]),
-  proj("p7",  "ANIME GRAPHICS",     "Burner Poster", "Burning Effect Poster", "A poster for the character Burner from the Korean comic Burning Effect.", ["/Images/Burner poster compressed.webp"]),
-  proj("p8",  "CAR GRAPHICS",       "Nissan Graphic Poster", "Nissan Car Poster", "A sleek graphic poster for the Nissan brand.", ["/Images/Nissan poster 2.webp"]),
-  proj("p9",  "ANIME GRAPHICS",     "Kai De Anectode Poster", "Burning Effect Poster", "A poster for Kai De Anectode from the Korean comic Burning Effect.", ["/Images/KAI poster compressed.webp"]),
-  proj("p10", "ANIME GRAPHICS",     "Roy Poster", "Burning Effect Poster", "A poster for Roy from the Korean comic Burning Effect.", ["/Images/Roy poster compressed.webp"]),
-  proj("p11", "ANIME GRAPHICS",     "Great Poster", "Burning Effect Poster", "A poster for Great from the Korean comic Burning Effect.", ["/Images/Great poster compressed.webp"]),
-  proj("p12", "ANIME GRAPHICS",     "Luck Poster", "Black Clover Poster", "A poster for Luck from the Anime Black Clover.", ["/Images/Luck Poster.webp"]),
-  proj("p13", "ANIME GRAPHICS",     "Zora Poster", "Black Clover Poster", "A poster for Zora from the Anime Black Clover.", ["/Images/Zora poster.webp"]),
-  proj("p14", "ANIME GRAPHICS",     "Asta Poster", "Black Clover Poster", "A poster for Asta from the Anime Black Clover.", ["/Images/Asta poster 2.jpg"]),
-  proj("p15", "ANIME GRAPHICS",     "Mereleona Vermillion Poster", "Black Clover Poster", "A poster for Mereleona Vermillion from the Anime Black Clover.", ["/Images/Vermillion Poster.webp"]),
-  proj("p16", "ANIME GRAPHICS",     "Aizen Sosuke Poster", "Bleach Poster", "A poster for Aizen Sosuke from the Anime Bleach.", ["/Images/Aizen Poster.webp"]),
-  proj("p17", "ANIME GRAPHICS",     "Liebe Poster", "Black Clover Poster", "A poster for Liebe from the Anime Black Clover.", ["/Images/Liebe Poster.webp"]),
-  proj("p18", "ANIME GRAPHICS",     "Asta Brutalism Poster", "Black Clover Poster", "A brutalism-style poster for Asta from the Anime Black Clover.", ["/Images/Asta brutalism poster Instagram.webp"]),
+  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC ", "A Match Day poster of Reece James for Chelsea FC.", ["/Images/Reeece James compressed.webp"]),
+  proj("p3",  "FOOTBALL GRAPHICS",  "Antony Poster", "Real Betis ", "A graphic poster for Antony at Real Betis.", ["/Images/Antony poster psd-Smaller.webp"]),
+  proj("p4",  "FOOTBALL GRAPHICS",  "Jude Bellingham Poster", "England ", "A graphic poster of Jude Bellingham.", ["/Images/Jude Poster-Second Version.webp"]),
+  proj("p5",  "ANIME GRAPHICS",     "Sin Jin Woo Poster", "Solo Leveling", "A graphic poster for Sin Jin Woo from the Korean comic Solo Leveling.", ["/Images/Sun jin woo poster 2.webp"]),
+  proj("p6",  "ANIME GRAPHICS",     "Sun Suho Poster", "Solo Leveling Ragnarok", "A graphic poster for Sun Suho from the Korean comic Solo Leveling Ragnarok.", ["/Images/Sung suho poster 2.webp"]),
+  proj("p7",  "ANIME GRAPHICS",     "Burner Poster", "Burning Effect", "A poster for the character Burner from the Korean comic Burning Effect.", ["/Images/Burner poster compressed.webp"]),
+  proj("p8",  "CAR GRAPHICS",       "Nissan Graphic Poster", "Nissan", "A sleek graphic poster for the Nissan brand.", ["/Images/Nissan poster 2.webp"]),
+  proj("p9",  "ANIME GRAPHICS",     "Kai De Anectode Poster", "Burning Effect", "A poster for Kai De Anectode from the Korean comic Burning Effect.", ["/Images/KAI poster compressed.webp"]),
+  proj("p10", "ANIME GRAPHICS",     "Roy Poster", "Burning Effect", "A poster for Roy from the Korean comic Burning Effect.", ["/Images/Roy poster compressed.webp"]),
+  proj("p11", "ANIME GRAPHICS",     "Great Poster", "Burning Effect", "A poster for Great from the Korean comic Burning Effect.", ["/Images/Great poster compressed.webp"]),
+  proj("p12", "ANIME GRAPHICS",     "Luck Poster", "Black Clover", "A poster for Luck from the Anime Black Clover.", ["/Images/Luck Poster.webp"]),
+  proj("p13", "ANIME GRAPHICS",     "Zora Poster", "Black Clover", "A poster for Zora from the Anime Black Clover.", ["/Images/Zora poster.webp"]),
+  proj("p14", "ANIME GRAPHICS",     "Asta Poster", "Black Clover", "A poster for Asta from the Anime Black Clover.", ["/Images/Asta poster 2.jpg"]),
+  proj("p15", "ANIME GRAPHICS",     "Mereleona Vermillion Poster", "Black Clover", "A poster for Mereleona Vermillion from the Anime Black Clover.", ["/Images/Vermillion Poster.webp"]),
+  proj("p16", "ANIME GRAPHICS",     "Aizen Sosuke Poster", "Bleach", "A poster for Aizen Sosuke from the Anime Bleach.", ["/Images/Aizen Poster.webp"]),
+  proj("p17", "ANIME GRAPHICS",     "Liebe Poster", "Black Clover", "A poster for Liebe from the Anime Black Clover.", ["/Images/Liebe Poster.webp"]),
+  proj("p18", "ANIME GRAPHICS",     "Asta Brutalism Poster", "Black Clover", "A brutalism-style poster for Asta from the Anime Black Clover.", ["/Images/Asta brutalism poster Instagram.webp"]),
   proj("p19", "ANIME GRAPHICS",     "Han Ysalt Poster", "Pick Me Up Infinite Gacha", "A poster for Han Ysalt from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/Han ysalt Poster-Smaller.webp"]),
   proj("p20", "ANIME GRAPHICS",     "Yvolka Rivela Poster", "Pick Me Up Infinite Gacha", "A poster for Yvolka Rivela from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/yvolka poster.webp"]),
   proj("p21", "GAME GRAPHICS",      "Helldivers 2 Poster", "HELLDIVERS 2", "A propaganda poster for Helldivers 2.", ["/Images/Helldivers 2 propaganda poster 2 Complete.webp"]),
-  proj("p22", "CAR GRAPHICS",       "Porsche Poster", "Porsche Car Poster", "A graphic poster for Porsche.", ["/Images/Porshce image compressed.webp"]),
+  proj("p22", "CAR GRAPHICS",       "Porsche Poster", "Porsche", "A graphic poster for Porsche.", ["/Images/Porshce image compressed.webp"]),
   proj("p23", "BRANDING",           "Road House Poster", "ROAD HOUSE GUEST HOUSE", "A concept brand poster.", ["/Images/Guest-House Poster-2.webp"]),
   proj("p24", "BRANDING",           "Math Academy Poster", "Educational Brand Poster", "A poster for Math Academy.", ["/Images/MAth academy compressed.webp"]),
   proj("p25", "BRANDING",           "FessyNam Poster", "FessyNam IT Brand Poster", "A poster for FessyNam.", ["/Images/FessyNam compressed.webp"]),
-  proj("p26", "BRANDING",           "Sono Ace Poster", "Sono Ace Audio Brand Poster", "A poster for Sono Ace headphones.", ["/Images/Sono Ace Poster.webp"]),
-  proj("p27", "FOOTBALL GRAPHICS",  "Lewandowski Poster", "FC Bayern Poster", "A poster for Robert Lewandowski showcasing his stats for FC Bayern.", ["/Images/Robert lewandowski poster-smaller.webp"]),
-  proj("p28", "FOOTBALL GRAPHICS",  "Zlatan Poster", "FC Barcelona Poster", "A poster for Zlatan Ibrahimovic for his time at FC Barcelona.", ["/Images/Zlatan Poster.webp"]),
+  proj("p26", "BRANDING",           "Sono Ace Poster", "Sono Ace Audio", "A poster for Sono Ace headphones.", ["/Images/Sono Ace Poster.webp"]),
+  proj("p27", "FOOTBALL GRAPHICS",  "Lewandowski Poster", "FC Bayern ", "A poster for Robert Lewandowski showcasing his stats for FC Bayern.", ["/Images/Robert lewandowski poster-smaller.webp"]),
+  proj("p28", "FOOTBALL GRAPHICS",  "Zlatan Poster", "FC Barcelona ", "A poster for Zlatan Ibrahimovic for his time at FC Barcelona.", ["/Images/Zlatan Poster.webp"]),
   proj("p29", "FOOTBALL GRAPHICS",  "Desire Doue Poster", "PSG Poster", "A poster for Desire Doue.", ["/Images/poster instagram.webp"]),
-  proj("p30", "FOOTBALL GRAPHICS",  "Desire Doue Poster 2", "PSG Poster", "A second poster for Desire Doue.", ["/Images/Desire Doue poster 2.webp"]),
-  proj("p31", "FOOTBALL GRAPHICS",  "Estevao Willian Poster", "Chelsea FC Poster", "A Matchday Poster for Estevao Willian.", ["/Images/Estevao poster-New smaller.webp"]),
-  proj("p32", "FOOTBALL GRAPHICS",  "Noni Madueke Poster", "Chelsea FC Poster", "A Matchday Poster for Noni Madueke.", ["/Images/Noni madueke compressed.webp"]),
-  proj("p33", "FOOTBALL GRAPHICS",  "Mohamed Salah Poster", "Liverpool FC Poster", "A poster for Mohamed Salah showcasing his stats for Liverpool FC.", ["/Images/Salah poster-medium sized.webp"]),
-  proj("p34", "FOOTBALL GRAPHICS",  "Neymar Jr Poster", "Santos FC Poster", "A graphic poster for Neymar Jr showing all the clubs he has played for.", ["/Images/Neymar Poster-Smaller.webp"]),
-  proj("p35", "FOOTBALL GRAPHICS",  "Luis Suarez Poster", "FC Barcelona Poster", "A stats poster for Luis Suarez.", ["/Images/Luiz suarez poster-smaller.webp"]),
-  proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC Poster", "A graphic poster for Malo Gusto showcasing his stats for Chelsea FC.", ["/Images/Malo gusto image compressed.webp"]),
+  proj("p30", "FOOTBALL GRAPHICS",  "Desire Doue Poster 2", "Paris Saint-Germain ", "A second poster for Desire Doue.", ["/Images/Desire Doue poster 2.webp"]),
+  proj("p31", "FOOTBALL GRAPHICS",  "Estevao Willian Poster", "Chelsea FC ", "A Matchday Poster for Estevao Willian.", ["/Images/Estevao poster-New smaller.webp"]),
+  proj("p32", "FOOTBALL GRAPHICS",  "Noni Madueke Poster", "Chelsea FC ", "A Matchday Poster for Noni Madueke.", ["/Images/Noni madueke compressed.webp"]),
+  proj("p33", "FOOTBALL GRAPHICS",  "Mohamed Salah Poster", "Liverpool FC", "A poster for Mohamed Salah showcasing his stats for Liverpool FC.", ["/Images/Salah poster-medium sized.webp"]),
+  proj("p34", "FOOTBALL GRAPHICS",  "Neymar Jr Poster", "Santos FC", "A graphic poster for Neymar Jr showing all the clubs he has played for.", ["/Images/Neymar Poster-Smaller.webp"]),
+  proj("p35", "FOOTBALL GRAPHICS",  "Luis Suarez Poster", "FC Barcelona", "A stats poster for Luis Suarez.", ["/Images/Luiz suarez poster-smaller.webp"]),
+  proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC", "A graphic poster for Malo Gusto showcasing his stats for Chelsea FC.", ["/Images/Malo gusto image compressed.webp"]),
   proj("p37", "FOOTBALL GRAPHICS",  "Portugal 2026 Graphic Poster", "Portugal FA", "A graphic poster for the Portugal 2026 World Cup. squad", ["/Images/Cristiano ronaldo Portugal poster.webp"]),
   proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster-3.webp"]),
   proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"]),
@@ -147,6 +147,7 @@ function getCoverflowTransform(offset: number, cardWidth: number, isMobile: bool
     return {
       transform: `translateX(${offset > 0 ? 600 : -600}px) scale(0)`,
       opacity: 0,
+      dim: 0,
       zIndex: 0,
       pointerEvents: "none" as const,
     };
@@ -155,11 +156,12 @@ function getCoverflowTransform(offset: number, cardWidth: number, isMobile: bool
   if (isMobile) {
     const translateX = offset * cardWidth * 0.9;
     const scale = absOffset === 0 ? 1 : 0.84;
-    const opacity = absOffset === 0 ? 1 : 0.56;
+    const dim = absOffset === 0 ? 0 : 0.45;
 
     return {
       transform: `translate3d(${translateX}px, 0, 0) scale(${scale})`,
-      opacity,
+      opacity: 1,
+      dim,
       zIndex: absOffset === 0 ? 20 : 10,
       pointerEvents: absOffset === 0 ? "auto" as const : "none" as const,
     };
@@ -177,20 +179,20 @@ function getCoverflowTransform(offset: number, cardWidth: number, isMobile: bool
 
   const translateZ = -absOffset * 35;
 
-  let opacity = 1;
-  if (absOffset === 1) opacity = 0.75;
-  else if (absOffset === 2) opacity = 0.45;
+  let dim = 0;
+  if (absOffset === 1) dim = 0.35;
+  else if (absOffset === 2) dim = 0.65;
 
   const zIndex = 10 - absOffset;
 
   return {
     transform: `translateX(${translateX}px) translateZ(${translateZ}px) rotateY(${rotation}deg) scale(${scale})`,
-    opacity,
+    opacity: 1,
+    dim,
     zIndex,
     pointerEvents: "auto" as const,
   };
 }
-
 // ─── Main Gallery Component ───────────────────────────────────────────────────
 interface Props {
   projects?: GalleryItem[];
@@ -506,56 +508,57 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
 
         {/* Coverflow Track */}
         <div className={styles.coverflowTrack}>
-          {filtered.map((project, idx) => {
-            const shouldRender = !isMobile || Math.abs(idx - activeIndex) <= 1;
-            if (!shouldRender) return null;
+        {filtered.map((project, idx) => {
+  const shouldRender = !isMobile || Math.abs(idx - activeIndex) <= 1;
+  if (!shouldRender) return null;
 
-            const offset = idx - activeIndex;
-            const transform = getCoverflowTransform(offset, cardWidth, isMobile);
-            const isActive = offset === 0;
+  const offset = idx - activeIndex;
+  const { dim, ...cardTransform } = getCoverflowTransform(offset, cardWidth, isMobile);
+  const isActive = offset === 0;
 
-            return (
-              <div
-                key={project.id}
-                className={`${styles.cfCard} ${isActive ? styles.cfCardActive : ""}`}
-                style={{
-                  width: cardWidth,
-                  height: cardHeight,
-                  marginLeft: -cardWidth / 2,
-                  marginTop: -cardHeight / 2,
-                  background: project.bg,
-                  ...transform,
-                }}
-                onClick={() => {
-                  if (isActive) openModal(project);
-                  else goToIndex(idx);
-                }}
-              >
-                <img
-                  src={project.images[0]}
-                  alt={project.title}
-                  className={styles.cfCardImg}
-                  draggable={false}
-                  loading={isMobile ? "eager" : "lazy"}
-                  decoding="async"
-                />
-                <div className={styles.cfCardOverlay} />
-                {isActive && <div className={styles.shimmerRing} />}
-                {!isMobile && (
-                  <div className={styles.cfCardReflection}>
-                    <img
-                      src={project.images[0]}
-                      alt=""
-                      className={styles.cfCardReflectionImg}
-                      draggable={false}
-                      loading="lazy"
-                      decoding="async"
-                    />
-                  </div>
-                )}
-              </div>
-            );
-          })}
+  return (
+    <div
+      key={project.id}
+      className={`${styles.cfCard} ${isActive ? styles.cfCardActive : ""}`}
+      style={{
+        width: cardWidth,
+        height: cardHeight,
+        marginLeft: -cardWidth / 2,
+        marginTop: -cardHeight / 2,
+        background: project.bg,
+        ...cardTransform,
+      }}
+      onClick={() => {
+        if (isActive) openModal(project);
+        else goToIndex(idx);
+      }}
+    >
+      <img
+        src={project.images[0]}
+        alt={project.title}
+        className={styles.cfCardImg}
+        draggable={false}
+        loading={isMobile ? "eager" : "lazy"}
+        decoding="async"
+      />
+      <div className={styles.cfCardOverlay} />
+      {dim > 0 && <div className={styles.cfCardDim} style={{ opacity: dim }} />}
+      {isActive && <div className={styles.shimmerRing} />}
+      {!isMobile && (
+        <div className={styles.cfCardReflection}>
+          <img
+            src={project.images[0]}
+            alt=""
+            className={styles.cfCardReflectionImg}
+            draggable={false}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )}
+    </div>
+  );
+})}
         </div>
 
         <div className={styles.reflectionStrip} />
@@ -667,13 +670,18 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
   };
 
   return (
-    <div className={styles.modalBackdrop} onClick={onClose}>
-      <div
-        className={`${styles.modal} ${isUiUx ? styles.modalUiux : ""}`}
-        onClick={(e) => e.stopPropagation()}
-        onTouchStart={handleModalTouchStart}
-        onTouchMove={handleModalTouchMove}
-      >
+  <div className={styles.modalBackdrop} onClick={onClose}>
+    <div
+      className={styles.modalBgGlow}
+      style={{ backgroundImage: `url(${project.images[0]})` }}
+      aria-hidden="true"
+    />
+    <div
+      className={`${styles.modal} ${isUiUx ? styles.modalUiux : ""}`}
+      onClick={(e) => e.stopPropagation()}
+      onTouchStart={handleModalTouchStart}
+      onTouchMove={handleModalTouchMove}
+    >
         <button className={styles.closeBtn} onClick={onClose} aria-label="Close">✕</button>
 
         <div className={styles.modalImgWrap}>
