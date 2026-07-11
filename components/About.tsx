@@ -117,12 +117,42 @@ function ServiceCard({
                 <div className={styles.serviceDescWrap}>
                     <p className={styles.serviceDesc}>{desc}</p>
                     <span className={styles.serviceHint}>
-                        <span className={styles.serviceHintIcon}>↦</span>
+                        <span className={styles.serviceHintIcon}>
+                            {/* SVG arrow ↦ replacement */}
+                            <svg 
+                                width="14" 
+                                height="14" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                strokeWidth="2" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                            >
+                                <path d="M7 7L17 17" />
+                                <path d="M17 7V17H7" />
+                            </svg>
+                        </span>
                         Hover to reveal
                     </span>
                 </div>
             </div>
-            <span className={styles.serviceArrow}>↗</span>
+            <span className={styles.serviceArrow}>
+                {/* SVG arrow ↗ replacement */}
+                <svg 
+                    width="18" 
+                    height="18" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    strokeWidth="2" 
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                >
+                    <path d="M7 17L17 7" />
+                    <path d="M7 7H17V17" />
+                </svg>
+            </span>
         </div>
     );
 }

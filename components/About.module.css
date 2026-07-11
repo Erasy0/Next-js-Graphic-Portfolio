@@ -373,10 +373,17 @@
 }
 
 .serviceHintIcon {
-    display: inline-block;
-    color: rgba(255, 255, 255, 0.75);       /* new — icon slightly brighter than text */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.75);
 }
 
+.serviceHintIcon svg {
+    display: block;
+    width: 14px;
+    height: 14px;
+}
 @media (hover: hover) {
     .serviceHint {
         display: inline-flex;
@@ -406,11 +413,42 @@
 }
 /* ─── Arrow ─── */
 .serviceArrow {
-    font-size: 1.2rem;
-    color: rgba(255,255,255,0.16);   /* was rgba(255,255,255,0) */
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     transition: color 0.25s ease, transform 0.25s ease;
 }
+
+.serviceArrow svg {
+    display: block;
+    width: 18px;
+    height: 18px;
+    color: rgba(255, 255, 255, 0.16);
+    transition: color 0.25s ease;
+}
+
+.serviceCard:hover .serviceArrow svg {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.serviceCard:hover .serviceArrow {
+    transform: translateY(-2px) translateX(1px);
+}
+
+/* ─── Arrow nudge animation ─── */
+@media (hover: hover) {
+    .serviceArrow {
+        animation: arrowNudge 2.2s ease-in-out infinite;
+    }
+}
+
+@keyframes arrowNudge {
+    0%, 50%, 100% { transform: translateX(0); }
+    25%           { transform: translateX(4px); }
+}
+
+
 .serviceCard:hover .serviceArrow {
     color: rgba(255,255,255,0.3);
     transform: translateY(-2px) translateX(1px);

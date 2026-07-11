@@ -157,6 +157,9 @@ const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"], { visualWeight: "light", dominantColor: "blue", featured: true }),
   proj("p40", "UI/UX DESIGN",  "Green Hydrogen Analytics Post Analysis", "Green Hydrogen Analytics Post", "A poster for analyzing a post about green hydrogen.", ["/Images/Green Hydrogen UIUX Design.webp"], { visualWeight: "light", dominantColor: "green", featured: true }),
   proj("p41", "ANIME GRAPHICS",  "Drian Poster ", "Burning effect", "A poster for Drian from the Korean manhwa` burning effect.", ["/Images/Drian Poster.webp"], { visualWeight: "heavy", dominantColor: "black", featured: true }),
+   proj("p42", "BRANDING",  "Datalani Technology Logo ", "Datalani Technology", "A logo design for Datalani Technology.", ["/Images/FessyNam Logo.webp"], { visualWeight: "heavy", dominantColor: "blue", featured: true }),
+    proj("p43", "UI/UX DESIGN",  "Erastus Shindinge Portfolio Home Page 2024 Design", "Erastus Shindinge", "A portfolio design for Erastus Shindinge portfolio 2024.", ["/Images/Erastus 2024 Portfolio.webp"], { visualWeight: "heavy", dominantColor: "black", featured: true }),
+     proj("p44", "UI/UX DESIGN",  "Urban Sweep Route Management Page Design ", "Urban Sweep", "A design for Urban Sweep route management page.", ["/Images/Urban Sweep Route Management page.webp"], { visualWeight: "heavy", dominantColor: "white", featured: true }),
 ];
 
 // ─── Smart Curated Ordering ────────────────────────────────────────────────────
@@ -283,6 +286,41 @@ function getCoverflowTransform(offset: number, cardWidth: number, isMobile: bool
     pointerEvents: "auto" as const,
   };
 }
+
+// ─── Blur-up image load tracking ──────────────────────────────────────────────
+// Tracks real image load state so cards/modal images can blur while loading
+// and sharpen in once the browser actually has the bytes, instead of either
+// popping in instantly or sitting on a flat background color.
+// useLayoutEffect (not useEffect) matters here: for already-cached images
+// (revisiting a card, or images the existing preloader already fetched),
+// this resolves before paint, so there's no one-frame flash of blur.
+function useImageLoaded(src: string) {
+  const [loaded, setLoaded] = useState(false);
+
+  useLayoutEffect(() => {
+    let cancelled = false;
+    setLoaded(false);
+
+    const img = new window.Image();
+    img.onload = () => {
+      if (!cancelled) setLoaded(true);
+    };
+    img.src = src;
+
+    // Already in browser cache — resolves synchronously, no blur flash.
+    if (img.complete && img.naturalWidth > 0) {
+      setLoaded(true);
+    }
+
+    return () => {
+      cancelled = true;
+      img.onload = null;
+    };
+  }, [src]);
+
+  return loaded;
+}
+
 // ─── Main Gallery Component ───────────────────────────────────────────────────
 interface Props {
   projects?: GalleryItem[];
@@ -619,58 +657,33 @@ export default function Gallery({ projects = CURATED_PROJECTS }: Props) {
 
         {/* Coverflow Track */}
         <div className={styles.coverflowTrack}>
-        {filtered.map((project, idx) => {
-  const shouldRender = !isMobile || Math.abs(idx - activeIndex) <= 1;
-  if (!shouldRender) return null;
+          {filtered.map((project, idx) => {
+            const shouldRender = !isMobile || Math.abs(idx - activeIndex) <= 1;
+            if (!shouldRender) return null;
 
-  const offset = idx - activeIndex;
-  const { dim, ...cardTransform } = getCoverflowTransform(offset, cardWidth, isMobile);
-  const isActive = offset === 0;
+            const offset = idx - activeIndex;
+            const { dim, ...transformStyle } = getCoverflowTransform(offset, cardWidth, isMobile);
+            const isActive = offset === 0;
 
-  return (
-    <div
-      key={project.id}
-      className={`${styles.cfCard} ${isActive ? styles.cfCardActive : ""} ${justFiltered ? styles.cfCardFilterIn : ""}`}
-      style={{
-        width: cardWidth,
-        height: cardHeight,
-        marginLeft: -cardWidth / 2,
-        marginTop: -cardHeight / 2,
-        background: project.bg,
-        animationDelay: justFiltered ? `${Math.min(Math.abs(offset), 5) * 55}ms` : undefined,
-        ...cardTransform,
-      }}
-      onClick={() => {
-        if (isActive) openModal(project);
-        else goToIndex(idx);
-      }}
-    >
-      <img
-        src={project.images[0]}
-        alt={project.title}
-        className={styles.cfCardImg}
-        draggable={false}
-        loading={isMobile ? "eager" : "lazy"}
-        decoding="async"
-      />
-      <div className={styles.cfCardOverlay} />
-      {dim > 0 && <div className={styles.cfCardDim} style={{ opacity: dim }} />}
-      {isActive && <div className={styles.shimmerRing} />}
-      {!isMobile && (
-        <div className={styles.cfCardReflection}>
-          <img
-            src={project.images[0]}
-            alt=""
-            className={styles.cfCardReflectionImg}
-            draggable={false}
-            loading="lazy"
-            decoding="async"
-          />
-        </div>
-      )}
-    </div>
-  );
-})}
+            return (
+              <CoverflowCard
+                key={project.id}
+                project={project}
+                isActive={isActive}
+                isMobile={isMobile}
+                justFiltered={justFiltered}
+                offset={offset}
+                dim={dim}
+                cardWidth={cardWidth}
+                cardHeight={cardHeight}
+                transformStyle={transformStyle}
+                onClick={() => {
+                  if (isActive) openModal(project);
+                  else goToIndex(idx);
+                }}
+              />
+            );
+          })}
         </div>
 
         <div className={styles.reflectionStrip} />
@@ -713,6 +726,75 @@ export default function Gallery({ projects = CURATED_PROJECTS }: Props) {
         document.body
       )}
     </section>
+  );
+}
+
+// ─── Coverflow Card ────────────────────────────────────────────────────────────
+// Extracted so useImageLoaded (a hook) can be called once per card instead of
+// inside the parent's .map() loop, which would break the Rules of Hooks.
+function CoverflowCard({
+  project,
+  isActive,
+  isMobile,
+  justFiltered,
+  offset,
+  dim,
+  cardWidth,
+  cardHeight,
+  transformStyle,
+  onClick,
+}: {
+  project: GalleryItem;
+  isActive: boolean;
+  isMobile: boolean;
+  justFiltered: boolean;
+  offset: number;
+  dim: number;
+  cardWidth: number;
+  cardHeight: number;
+  transformStyle: React.CSSProperties;
+  onClick: () => void;
+}) {
+  const loaded = useImageLoaded(project.images[0]);
+
+  return (
+    <div
+      className={`${styles.cfCard} ${isActive ? styles.cfCardActive : ""} ${justFiltered ? styles.cfCardFilterIn : ""}`}
+      style={{
+        width: cardWidth,
+        height: cardHeight,
+        marginLeft: -cardWidth / 2,
+        marginTop: -cardHeight / 2,
+        background: project.bg,
+        animationDelay: justFiltered ? `${Math.min(Math.abs(offset), 5) * 55}ms` : undefined,
+        ...transformStyle,
+      }}
+      onClick={onClick}
+    >
+      <img
+        src={project.images[0]}
+        alt={project.title}
+        className={`${styles.cfCardImg} ${loaded ? "" : styles.cfCardImgLoading}`}
+        draggable={false}
+        loading={isMobile ? "eager" : "lazy"}
+        decoding="async"
+      />
+      <div className={styles.cfCardOverlay} />
+      {dim > 0 && <div className={styles.cfCardDim} style={{ opacity: dim }} />}
+      {isActive && <div className={styles.shimmerRing} />}
+      {!isMobile && (
+        <div className={styles.cfCardReflection}>
+          <img
+            src={project.images[0]}
+            alt=""
+            className={styles.cfCardReflectionImg}
+            draggable={false}
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -808,12 +890,7 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
             {project.images.map((src, idx) => (
               <div className={styles.modalImgSlide} key={idx}>
                 <div className={styles.modalImgFrame}>
-                  <img
-                    src={src}
-                    alt={`${project.title} - ${idx + 1}`}
-                    className={styles.modalImg}
-                    draggable={false}
-                  />
+                  <ModalSlideImage src={src} alt={`${project.title} - ${idx + 1}`} />
                 </div>
               </div>
             ))}
@@ -862,5 +939,20 @@ function Modal({ project, onClose }: { project: GalleryItem; onClose: () => void
         </div>
       </div>
     </div>
+  );
+}
+
+// ─── Modal Slide Image ─────────────────────────────────────────────────────────
+// Extracted so useImageLoaded (a hook) can be called once per slide instead of
+// inside the parent's .map() loop, which would break the Rules of Hooks.
+function ModalSlideImage({ src, alt }: { src: string; alt: string }) {
+  const loaded = useImageLoaded(src);
+  return (
+    <img
+      src={src}
+      alt={alt}
+      className={`${styles.modalImg} ${loaded ? "" : styles.modalImgLoading}`}
+      draggable={false}
+    />
   );
 }
