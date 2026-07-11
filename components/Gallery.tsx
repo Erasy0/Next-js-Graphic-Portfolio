@@ -19,6 +19,15 @@ export type GalleryItem = {
   link?: string;
   /** Show a "not built for mobile" notice next to the link in the modal */
   mobileWarning?: boolean;
+  /** Rough "how dense/dramatic does this piece feel" tag used by the curated
+   *  ordering algorithm below — a manual estimate, not a real image analysis. */
+  visualWeight?: "heavy" | "light";
+  /** Rough dominant-color tag used to avoid placing near-identical palettes
+   *  back-to-back — also a manual estimate. */
+  dominantColor?: string;
+  /** Marks a standout piece the ordering algorithm can use as a "hook",
+   *  mid-gallery highlight, or "finale" anchor. */
+  featured?: boolean;
 };
 
 // ─── Constants ────────────────────────────────────────────────────────────────
@@ -75,7 +84,13 @@ function proj(
   sub: string,
   description: string,
   images: string[],
-  extra?: { link?: string; mobileWarning?: boolean }
+  extra?: {
+    link?: string;
+    mobileWarning?: boolean;
+    visualWeight?: "heavy" | "light";
+    dominantColor?: string;
+    featured?: boolean;
+  }
 ): GalleryItem {
   return {
     id,
@@ -88,54 +103,129 @@ function proj(
     bg: CATEGORY_BGS[category] ?? "#0a0a0a",
     link: extra?.link,
     mobileWarning: extra?.mobileWarning,
+    visualWeight: extra?.visualWeight ?? "light",
+    dominantColor: extra?.dominantColor ?? "#888888",
+    featured: extra?.featured ?? false,
   };
 }
 
 // ─── Default projects ─────────────────────────────────────────────────────────
 // ─── Default projects ─────────────────────────────────────────────────────────
+// Metadata (visualWeight / dominantColor / featured) is a manual best-guess
+// estimate based on category + subject matter — not a real image analysis.
+// Adjust any tag directly here if it doesn't match the actual artwork; the
+// ordering algorithm below just consumes whatever is tagged.
 const DEFAULT_PROJECTS: GalleryItem[] = [
-  proj("p1",  "PHOTO MANIPLATION",  "Baby Jellys", "Photo Manipulation & Digital Art", "My first ever work with Photoshop.", ["/Images/Baby jellys compressed.webp"]),
-  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC ", "A Match Day poster of Reece James for Chelsea FC.", ["/Images/Reeece James compressed.webp"]),
-  proj("p3",  "FOOTBALL GRAPHICS",  "Antony Poster", "Real Betis ", "A graphic poster for Antony at Real Betis.", ["/Images/Antony poster psd-Smaller.webp"]),
-  proj("p4",  "FOOTBALL GRAPHICS",  "Jude Bellingham Poster", "England ", "A graphic poster of Jude Bellingham.", ["/Images/Jude Poster-Second Version.webp"]),
-  proj("p5",  "ANIME GRAPHICS",     "Sin Jin Woo Poster", "Solo Leveling", "A graphic poster for Sin Jin Woo from the Korean comic Solo Leveling.", ["/Images/Sun jin woo poster 2.webp"]),
-  proj("p6",  "ANIME GRAPHICS",     "Sun Suho Poster", "Solo Leveling Ragnarok", "A graphic poster for Sun Suho from the Korean comic Solo Leveling Ragnarok.", ["/Images/Sung suho poster 2.webp"]),
-  proj("p7",  "ANIME GRAPHICS",     "Burner Poster", "Burning Effect", "A poster for the character Burner from the Korean comic Burning Effect.", ["/Images/Burner poster compressed.webp"]),
-  proj("p8",  "CAR GRAPHICS",       "Nissan Graphic Poster", "Nissan", "A sleek graphic poster for the Nissan brand.", ["/Images/Nissan poster 2.webp"]),
-  proj("p9",  "ANIME GRAPHICS",     "Kai De Anectode Poster", "Burning Effect", "A poster for Kai De Anectode from the Korean comic Burning Effect.", ["/Images/KAI poster compressed.webp"]),
-  proj("p10", "ANIME GRAPHICS",     "Roy Poster", "Burning Effect", "A poster for Roy from the Korean comic Burning Effect.", ["/Images/Roy poster compressed.webp"]),
-  proj("p11", "ANIME GRAPHICS",     "Great Poster", "Burning Effect", "A poster for Great from the Korean comic Burning Effect.", ["/Images/Great poster compressed.webp"]),
-  proj("p12", "ANIME GRAPHICS",     "Luck Poster", "Black Clover", "A poster for Luck from the Anime Black Clover.", ["/Images/Luck Poster.webp"]),
-  proj("p13", "ANIME GRAPHICS",     "Zora Poster", "Black Clover", "A poster for Zora from the Anime Black Clover.", ["/Images/Zora poster.webp"]),
-  proj("p14", "ANIME GRAPHICS",     "Asta Poster", "Black Clover", "A poster for Asta from the Anime Black Clover.", ["/Images/Asta poster 2.jpg"]),
-  proj("p15", "ANIME GRAPHICS",     "Mereleona Vermillion Poster", "Black Clover", "A poster for Mereleona Vermillion from the Anime Black Clover.", ["/Images/Vermillion Poster.webp"]),
-  proj("p16", "ANIME GRAPHICS",     "Aizen Sosuke Poster", "Bleach", "A poster for Aizen Sosuke from the Anime Bleach.", ["/Images/Aizen Poster.webp"]),
-  proj("p17", "ANIME GRAPHICS",     "Liebe Poster", "Black Clover", "A poster for Liebe from the Anime Black Clover.", ["/Images/Liebe Poster.webp"]),
-  proj("p18", "ANIME GRAPHICS",     "Asta Brutalism Poster", "Black Clover", "A brutalism-style poster for Asta from the Anime Black Clover.", ["/Images/Asta brutalism poster Instagram.webp"]),
-  proj("p19", "ANIME GRAPHICS",     "Han Ysalt Poster", "Pick Me Up Infinite Gacha", "A poster for Han Ysalt from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/Han ysalt Poster-Smaller.webp"]),
-  proj("p20", "ANIME GRAPHICS",     "Yvolka Rivela Poster", "Pick Me Up Infinite Gacha", "A poster for Yvolka Rivela from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/yvolka poster.webp"]),
-  proj("p21", "GAME GRAPHICS",      "Helldivers 2 Poster", "HELLDIVERS 2", "A propaganda poster for Helldivers 2.", ["/Images/Helldivers 2 propaganda poster 2 Complete.webp"]),
-  proj("p22", "CAR GRAPHICS",       "Porsche Poster", "Porsche", "A graphic poster for Porsche.", ["/Images/Porshce image compressed.webp"]),
-  proj("p23", "BRANDING",           "Road House Poster", "ROAD HOUSE GUEST HOUSE", "A concept brand poster.", ["/Images/Guest-House Poster-2.webp"]),
-  proj("p24", "BRANDING",           "Math Academy Poster", "Educational Brand Poster", "A poster for Math Academy.", ["/Images/MAth academy compressed.webp"]),
-  proj("p25", "BRANDING",           "FessyNam Poster", "FessyNam IT Brand Poster", "A poster for FessyNam.", ["/Images/FessyNam compressed.webp"]),
-  proj("p26", "BRANDING",           "Sono Ace Poster", "Sono Ace Audio", "A poster for Sono Ace headphones.", ["/Images/Sono Ace Poster.webp"]),
-  proj("p27", "FOOTBALL GRAPHICS",  "Lewandowski Poster", "FC Bayern ", "A poster for Robert Lewandowski showcasing his stats for FC Bayern.", ["/Images/Robert lewandowski poster-smaller.webp"]),
-  proj("p28", "FOOTBALL GRAPHICS",  "Zlatan Poster", "FC Barcelona ", "A poster for Zlatan Ibrahimovic for his time at FC Barcelona.", ["/Images/Zlatan Poster.webp"]),
-  proj("p29", "FOOTBALL GRAPHICS",  "Desire Doue Poster", "PSG Poster", "A poster for Desire Doue.", ["/Images/poster instagram.webp"]),
-  proj("p30", "FOOTBALL GRAPHICS",  "Desire Doue Poster 2", "Paris Saint-Germain ", "A second poster for Desire Doue.", ["/Images/Desire Doue poster 2.webp"]),
-  proj("p31", "FOOTBALL GRAPHICS",  "Estevao Willian Poster", "Chelsea FC ", "A Matchday Poster for Estevao Willian.", ["/Images/Estevao poster-New smaller.webp"]),
-  proj("p32", "FOOTBALL GRAPHICS",  "Noni Madueke Poster", "Chelsea FC ", "A Matchday Poster for Noni Madueke.", ["/Images/Noni madueke compressed.webp"]),
-  proj("p33", "FOOTBALL GRAPHICS",  "Mohamed Salah Poster", "Liverpool FC", "A poster for Mohamed Salah showcasing his stats for Liverpool FC.", ["/Images/Salah poster-medium sized.webp"]),
-  proj("p34", "FOOTBALL GRAPHICS",  "Neymar Jr Poster", "Santos FC", "A graphic poster for Neymar Jr showing all the clubs he has played for.", ["/Images/Neymar Poster-Smaller.webp"]),
-  proj("p35", "FOOTBALL GRAPHICS",  "Luis Suarez Poster", "FC Barcelona", "A stats poster for Luis Suarez.", ["/Images/Luiz suarez poster-smaller.webp"]),
-  proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC", "A graphic poster for Malo Gusto showcasing his stats for Chelsea FC.", ["/Images/Malo gusto image compressed.webp"]),
-  proj("p37", "FOOTBALL GRAPHICS",  "Portugal 2026 Graphic Poster", "Portugal FA", "A graphic poster for the Portugal 2026 World Cup. squad", ["/Images/Cristiano ronaldo Portugal poster.webp"]),
-  proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster-3.webp"]),
-  proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"]),
-  proj("p40", "UI/UX DESIGN",  "Green Hydrogen Analytics Post Analysis", "Green Hydrogen Analytics Post", "A poster for analyzing a post about green hydrogen.", ["/Images/Green Hydrogen UIUX Design.webp"]),
-    proj("p41", "ANIME GRAPHICS",  "Drian Poster ", "Burning effect", "A poster for Drian from the Korean manhwa` burning effect.", ["/Images/Drian Poster.webp"]),
+  proj("p1",  "PHOTO MANIPLATION",  "Baby Jellys", "Photo Manipulation & Digital Art", "My first ever work with Photoshop.", ["/Images/Baby jellys compressed.webp"], { visualWeight: "light", dominantColor: "blue", featured: true }),
+  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC ", "A Match Day poster of Reece James for Chelsea FC.", ["/Images/Reeece James compressed.webp"], { visualWeight: "heavy", dominantColor: "blue" }),
+  proj("p3",  "FOOTBALL GRAPHICS",  "Antony Poster", "Real Betis ", "A graphic poster for Antony at Real Betis.", ["/Images/Antony poster psd-Smaller.webp"], { visualWeight: "heavy", dominantColor: "green" }),
+  proj("p4",  "FOOTBALL GRAPHICS",  "Jude Bellingham Poster", "England ", "A graphic poster of Jude Bellingham.", ["/Images/Jude Poster-Second Version.webp"], { visualWeight: "heavy", dominantColor: "white", featured: true }),
+  proj("p5",  "ANIME GRAPHICS",     "Sin Jin Woo Poster", "Solo Leveling", "A graphic poster for Sin Jin Woo from the Korean comic Solo Leveling.", ["/Images/Sun jin woo poster 2.webp"], { visualWeight: "heavy", dominantColor: "purple" }),
+  proj("p6",  "ANIME GRAPHICS",     "Sun Suho Poster", "Solo Leveling Ragnarok", "A graphic poster for Sun Suho from the Korean comic Solo Leveling Ragnarok.", ["/Images/Sung suho poster 2.webp"], { visualWeight: "heavy", dominantColor: "black" }),
+  proj("p7",  "ANIME GRAPHICS",     "Burner Poster", "Burning Effect", "A poster for the character Burner from the Korean comic Burning Effect.", ["/Images/Burner poster compressed.webp"], { visualWeight: "heavy", dominantColor: "orange" }),
+  proj("p8",  "CAR GRAPHICS",       "Nissan Graphic Poster", "Nissan", "A sleek graphic poster for the Nissan brand.", ["/Images/Nissan poster 2.webp"], { visualWeight: "light", dominantColor: "red", featured: true }),
+  proj("p9",  "ANIME GRAPHICS",     "Kai De Anectode Poster", "Burning Effect", "A poster for Kai De Anectode from the Korean comic Burning Effect.", ["/Images/KAI poster compressed.webp"], { visualWeight: "heavy", dominantColor: "black" }),
+  proj("p10", "ANIME GRAPHICS",     "Roy Poster", "Burning Effect", "A poster for Roy from the Korean comic Burning Effect.", ["/Images/Roy poster compressed.webp"], { visualWeight: "heavy", dominantColor: "purple" }),
+  proj("p11", "ANIME GRAPHICS",     "Great Poster", "Burning Effect", "A poster for Great from the Korean comic Burning Effect.", ["/Images/Great poster compressed.webp"], { visualWeight: "heavy", dominantColor: "black" }),
+  proj("p12", "ANIME GRAPHICS",     "Luck Poster", "Black Clover", "A poster for Luck from the Anime Black Clover.", ["/Images/Luck Poster.webp"], { visualWeight: "light", dominantColor: "yellow" }),
+  proj("p13", "ANIME GRAPHICS",     "Zora Poster", "Black Clover", "A poster for Zora from the Anime Black Clover.", ["/Images/Zora poster.webp"], { visualWeight: "heavy", dominantColor: "green" }),
+  proj("p14", "ANIME GRAPHICS",     "Asta Poster", "Black Clover", "A poster for Asta from the Anime Black Clover.", ["/Images/Asta poster 2.jpg"], { visualWeight: "heavy", dominantColor: "black", featured: true }),
+  proj("p15", "ANIME GRAPHICS",     "Mereleona Vermillion Poster", "Black Clover", "A poster for Mereleona Vermillion from the Anime Black Clover.", ["/Images/Vermillion Poster.webp"], { visualWeight: "heavy", dominantColor: "red" }),
+  proj("p16", "ANIME GRAPHICS",     "Aizen Sosuke Poster", "Bleach", "A poster for Aizen Sosuke from the Anime Bleach.", ["/Images/Aizen Poster.webp"], { visualWeight: "heavy", dominantColor: "purple", featured: true }),
+  proj("p17", "ANIME GRAPHICS",     "Liebe Poster", "Black Clover", "A poster for Liebe from the Anime Black Clover.", ["/Images/Liebe Poster.webp"], { visualWeight: "heavy", dominantColor: "purple" }),
+  proj("p18", "ANIME GRAPHICS",     "Asta Brutalism Poster", "Black Clover", "A brutalism-style poster for Asta from the Anime Black Clover.", ["/Images/Asta brutalism poster Instagram.webp"], { visualWeight: "heavy", dominantColor: "black" }),
+  proj("p19", "ANIME GRAPHICS",     "Han Ysalt Poster", "Pick Me Up Infinite Gacha", "A poster for Han Ysalt from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/Han ysalt Poster-Smaller.webp"], { visualWeight: "light", dominantColor: "blue" }),
+  proj("p20", "ANIME GRAPHICS",     "Yvolka Rivela Poster", "Pick Me Up Infinite Gacha", "A poster for Yvolka Rivela from the Korean comic Pick Me Up Infinite Gacha.", ["/Images/yvolka poster.webp"], { visualWeight: "light", dominantColor: "pink" }),
+  proj("p21", "GAME GRAPHICS",      "Helldivers 2 Poster", "HELLDIVERS 2", "A propaganda poster for Helldivers 2.", ["/Images/Helldivers 2 propaganda poster 2 Complete.webp"], { visualWeight: "heavy", dominantColor: "yellow", featured: true }),
+  proj("p22", "CAR GRAPHICS",       "Porsche Poster", "Porsche", "A graphic poster for Porsche.", ["/Images/Porshce image compressed.webp"], { visualWeight: "light", dominantColor: "gray", featured: true }),
+  proj("p23", "BRANDING",           "Road House Poster", "ROAD HOUSE GUEST HOUSE", "A concept brand poster.", ["/Images/Guest-House Poster-2.webp"], { visualWeight: "light", dominantColor: "brown", featured: true }),
+  proj("p24", "BRANDING",           "Math Academy Poster", "Educational Brand Poster", "A poster for Math Academy.", ["/Images/MAth academy compressed.webp"], { visualWeight: "light", dominantColor: "teal" }),
+  proj("p25", "BRANDING",           "FessyNam Poster", "FessyNam IT Brand Poster", "A poster for FessyNam.", ["/Images/FessyNam compressed.webp"], { visualWeight: "light", dominantColor: "blue" }),
+  proj("p26", "BRANDING",           "Sono Ace Poster", "Sono Ace Audio", "A poster for Sono Ace headphones.", ["/Images/Sono Ace Poster.webp"], { visualWeight: "light", dominantColor: "black" }),
+  proj("p27", "FOOTBALL GRAPHICS",  "Lewandowski Poster", "FC Bayern ", "A poster for Robert Lewandowski showcasing his stats for FC Bayern.", ["/Images/Robert lewandowski poster-smaller.webp"], { visualWeight: "heavy", dominantColor: "red" }),
+  proj("p28", "FOOTBALL GRAPHICS",  "Zlatan Poster", "FC Barcelona ", "A poster for Zlatan Ibrahimovic for his time at FC Barcelona.", ["/Images/Zlatan Poster.webp"], { visualWeight: "heavy", dominantColor: "maroon" }),
+  proj("p29", "FOOTBALL GRAPHICS",  "Desire Doue Poster", "PSG Poster", "A poster for Desire Doue.", ["/Images/poster instagram.webp"], { visualWeight: "light", dominantColor: "blue" }),
+  proj("p30", "FOOTBALL GRAPHICS",  "Desire Doue Poster 2", "Paris Saint-Germain ", "A second poster for Desire Doue.", ["/Images/Desire Doue poster 2.webp"], { visualWeight: "heavy", dominantColor: "red", featured: true }),
+  proj("p31", "FOOTBALL GRAPHICS",  "Estevao Willian Poster", "Chelsea FC ", "A Matchday Poster for Estevao Willian.", ["/Images/Estevao poster-New smaller.webp"], { visualWeight: "heavy", dominantColor: "blue" }),
+  proj("p32", "FOOTBALL GRAPHICS",  "Noni Madueke Poster", "Chelsea FC ", "A Matchday Poster for Noni Madueke.", ["/Images/Noni madueke compressed.webp"], { visualWeight: "heavy", dominantColor: "blue" }),
+  proj("p33", "FOOTBALL GRAPHICS",  "Mohamed Salah Poster", "Liverpool FC", "A poster for Mohamed Salah showcasing his stats for Liverpool FC.", ["/Images/Salah poster-medium sized.webp"], { visualWeight: "heavy", dominantColor: "red", featured: true }),
+  proj("p34", "FOOTBALL GRAPHICS",  "Neymar Jr Poster", "Santos FC", "A graphic poster for Neymar Jr showing all the clubs he has played for.", ["/Images/Neymar Poster-Smaller.webp"], { visualWeight: "heavy", dominantColor: "white" }),
+  proj("p35", "FOOTBALL GRAPHICS",  "Luis Suarez Poster", "FC Barcelona", "A stats poster for Luis Suarez.", ["/Images/Luiz suarez poster-smaller.webp"], { visualWeight: "heavy", dominantColor: "maroon" }),
+  proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC", "A graphic poster for Malo Gusto showcasing his stats for Chelsea FC.", ["/Images/Malo gusto image compressed.webp"], { visualWeight: "heavy", dominantColor: "blue" }),
+  proj("p37", "FOOTBALL GRAPHICS",  "Portugal 2026 Graphic Poster", "Portugal FA", "A graphic poster for the Portugal 2026 World Cup. squad", ["/Images/Cristiano ronaldo Portugal poster.webp"], { visualWeight: "heavy", dominantColor: "red" }),
+  proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster-3.webp"], { visualWeight: "heavy", dominantColor: "brown" }),
+  proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"], { visualWeight: "light", dominantColor: "blue", featured: true }),
+  proj("p40", "UI/UX DESIGN",  "Green Hydrogen Analytics Post Analysis", "Green Hydrogen Analytics Post", "A poster for analyzing a post about green hydrogen.", ["/Images/Green Hydrogen UIUX Design.webp"], { visualWeight: "light", dominantColor: "green", featured: true }),
+  proj("p41", "ANIME GRAPHICS",  "Drian Poster ", "Burning effect", "A poster for Drian from the Korean manhwa` burning effect.", ["/Images/Drian Poster.webp"], { visualWeight: "heavy", dominantColor: "black", featured: true }),
 ];
+
+// ─── Smart Curated Ordering ────────────────────────────────────────────────────
+// Builds an "exhibition flow" automatically from each project's metadata, so
+// adding new work later only means tagging it — not manually re-shuffling
+// dozens of array entries. The pass:
+//   1. Opens on a featured piece (in source order) — an immediate "hook".
+//   2. Closes on a different-category featured piece — an intentional finale.
+//   3. Greedily orders everything else to avoid repeating the same category,
+//      dominant color, or visual weight back-to-back, while gently
+//      resurfacing the remaining featured pieces through the middle third.
+function buildSmartOrder(items: GalleryItem[]): GalleryItem[] {
+  if (items.length <= 2) return [...items];
+
+  const remaining = [...items];
+  const takeAt = (idx: number) => remaining.splice(idx, 1)[0];
+
+  const openerIdx = remaining.findIndex((p) => p.featured);
+  const opener = takeAt(openerIdx === -1 ? 0 : openerIdx);
+
+  let finale: GalleryItem | null = null;
+  for (let i = remaining.length - 1; i >= 0; i--) {
+    if (remaining[i].featured && remaining[i].category !== opener.category) {
+      finale = takeAt(i);
+      break;
+    }
+  }
+
+  function friction(prev: GalleryItem, candidate: GalleryItem, recentCats: string[]) {
+    let score = 0;
+    if (candidate.category === prev.category) score += 6;
+    if (candidate.dominantColor && candidate.dominantColor === prev.dominantColor) score += 3;
+    if (candidate.visualWeight === prev.visualWeight) score += 1;
+    score += recentCats.filter((c) => c === candidate.category).length * 2;
+    return score;
+  }
+
+  const ordered: GalleryItem[] = [opener];
+  const recentCats: string[] = [opener.category as string];
+
+  while (remaining.length) {
+    const prev = ordered[ordered.length - 1];
+    const posRatio = ordered.length / (items.length || 1);
+    let bestIdx = 0;
+    let bestScore = Infinity;
+
+    remaining.forEach((candidate, i) => {
+      let score = friction(prev, candidate, recentCats.slice(-3));
+      // Gently resurface remaining featured pieces through the middle third —
+      // this is where a visitor is deciding whether to keep scrolling.
+      if (candidate.featured && posRatio > 0.25 && posRatio < 0.75) score -= 1;
+      if (score < bestScore) {
+        bestScore = score;
+        bestIdx = i;
+      }
+    });
+
+    const next = takeAt(bestIdx);
+    ordered.push(next);
+    recentCats.push(next.category as string);
+  }
+
+  if (finale) ordered.push(finale);
+  return ordered;
+}
+
+// Computed once at module load — deterministic, so it won't reshuffle on
+// every render or every visit.
+const CURATED_PROJECTS: GalleryItem[] = buildSmartOrder(DEFAULT_PROJECTS);
 
 
 // ─── Coverflow Math ──────────────────────────────────────────────────────────
@@ -174,10 +264,10 @@ function getCoverflowTransform(offset: number, cardWidth: number, isMobile: bool
   const rotation = direction * Math.min(absOffset * 12, MAX_ROTATION);
 
   let scale = 1;
-  if (absOffset === 1) scale = 0.75;
-  else if (absOffset === 2) scale = 0.55;
+  if (absOffset === 1) scale = 0.86;
+  else if (absOffset === 2) scale = 0.72;
 
-  const translateZ = -absOffset * 35;
+  const translateZ = -absOffset * 60;
 
   let dim = 0;
   if (absOffset === 1) dim = 0.35;
@@ -198,7 +288,7 @@ interface Props {
   projects?: GalleryItem[];
 }
 
-export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
+export default function Gallery({ projects = CURATED_PROJECTS }: Props) {
   const [dropOpen, setDropOpen] = useState(false);
   const [selectedCats, setSelectedCats] = useState<Set<Category>>(new Set());
   const [activeIndex, setActiveIndex] = useState(0);
@@ -258,10 +348,28 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
     setPortalReady(true);
   }, []);
 
-  // Reset index when filter changes
+  // Reset index when filter changes, and trigger a brief staggered entrance
+  // for the newly filtered set of cards instead of them popping in instantly
+  const [justFiltered, setJustFiltered] = useState(false);
   useEffect(() => {
     setActiveIndex(0);
+    setJustFiltered(true);
+    const t = setTimeout(() => setJustFiltered(false), 550);
+    return () => clearTimeout(t);
   }, [selectedCats]);
+
+  // Preload the previous/current/next active images so navigating never
+  // shows a flicker while a card image is still fetching in from the network
+  useEffect(() => {
+    if (!totalItems) return;
+    [activeIndex - 1, activeIndex, activeIndex + 1].forEach((i) => {
+      const p = filtered[(i + totalItems) % totalItems];
+      if (!p) return;
+      const img = new window.Image();
+      img.src = p.images[0];
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeIndex, totalItems, selectedCats]);
 
   // Auto-advance carousel
   function startAuto() {
@@ -522,13 +630,14 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
   return (
     <div
       key={project.id}
-      className={`${styles.cfCard} ${isActive ? styles.cfCardActive : ""}`}
+      className={`${styles.cfCard} ${isActive ? styles.cfCardActive : ""} ${justFiltered ? styles.cfCardFilterIn : ""}`}
       style={{
         width: cardWidth,
         height: cardHeight,
         marginLeft: -cardWidth / 2,
         marginTop: -cardHeight / 2,
         background: project.bg,
+        animationDelay: justFiltered ? `${Math.min(Math.abs(offset), 5) * 55}ms` : undefined,
         ...cardTransform,
       }}
       onClick={() => {

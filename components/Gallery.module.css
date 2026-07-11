@@ -236,7 +236,7 @@
   filter: blur(60px);
   opacity: 0.12;
   pointer-events: none;
-  transition: background 0.5s ease;
+  transition: background 0.7s cubic-bezier(0.4, 0, 0.2, 1);
   z-index: 0;
 }
 
@@ -278,8 +278,8 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   transition:
-    transform 0.5s cubic-bezier(0.23, 1, 0.32, 1),
-    opacity 0.35s ease;
+    transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s ease;
   will-change: transform, opacity;
   isolation: isolate;
   box-shadow:
@@ -455,6 +455,19 @@
 @keyframes shimmerSpin {
   from { --shimmer-angle: 0deg; }
   to   { --shimmer-angle: 360deg; }
+}
+
+/* ─── Filter Change: staggered entrance ──────────────────────────────────────── */
+/* Applied briefly to every card right after the category filter changes so
+   the new set cascades in instead of popping instantly. Opacity-only so it
+   never fights with the coverflow positioning transform. */
+@keyframes cardFilterFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.cfCardFilterIn {
+  animation: cardFilterFadeIn 0.45s ease both;
 }
 
 /* ─── Floor Reflection ───────────────────────────────────────────────────────── */
@@ -1134,7 +1147,8 @@
   .infoPanel,
   .modal,
   .modalBackdrop,
-  .shimmerRing {
+  .shimmerRing,
+  .cfCardFilterIn {
     transition: none !important;
     animation: none !important;
   }
