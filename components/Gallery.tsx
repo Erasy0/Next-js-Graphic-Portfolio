@@ -117,7 +117,7 @@ function proj(
 // ordering algorithm below just consumes whatever is tagged.
 const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p1",  "PHOTO MANIPLATION",  "Baby Jellys", "Photo Manipulation & Digital Art", "My first ever work with Photoshop.", ["/Images/Baby jellys compressed.webp"], { visualWeight: "light", dominantColor: "blue", featured: true }),
-  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC ", "A Match Day poster of Reece James for Chelsea FC.", ["/Images/Reeece James compressed.webp"], { visualWeight: "heavy", dominantColor: "blue" }),
+  proj("p2",  "FOOTBALL GRAPHICS",  "Reece James Poster", "Chelsea FC ", "A Match Day poster of Reece James for Chelsea FC.", ["/Images/Reeece James compressed-2.webp"], { visualWeight: "heavy", dominantColor: "blue" }),
   proj("p3",  "FOOTBALL GRAPHICS",  "Antony Poster", "Real Betis ", "A graphic poster for Antony at Real Betis.", ["/Images/Antony poster psd-Smaller.webp"], { visualWeight: "heavy", dominantColor: "green" }),
   proj("p4",  "FOOTBALL GRAPHICS",  "Jude Bellingham Poster", "England ", "A graphic poster of Jude Bellingham.", ["/Images/Jude Poster-Second Version.webp"], { visualWeight: "heavy", dominantColor: "white", featured: true }),
   proj("p5",  "ANIME GRAPHICS",     "Sin Jin Woo Poster", "Solo Leveling", "A graphic poster for Sin Jin Woo from the Korean comic Solo Leveling.", ["/Images/Sun jin woo poster 2.webp"], { visualWeight: "heavy", dominantColor: "purple" }),
@@ -154,12 +154,16 @@ const DEFAULT_PROJECTS: GalleryItem[] = [
   proj("p36", "FOOTBALL GRAPHICS",  "Malo Gusto Poster", "Chelsea FC", "A graphic poster for Malo Gusto showcasing his stats for Chelsea FC.", ["/Images/Malo gusto image compressed.webp"], { visualWeight: "heavy", dominantColor: "blue" }),
   proj("p37", "FOOTBALL GRAPHICS",  "Portugal 2026 Graphic Poster", "Portugal FA", "A graphic poster for the Portugal 2026 World Cup. squad", ["/Images/Cristiano ronaldo Portugal poster.webp"], { visualWeight: "heavy", dominantColor: "red" }),
   proj("p38", "BRANDING",  "Namibian enlistment war time concept Poster", "Namibai", "A graphic poster for the Namibian enlistment war time concept.", ["/Images/Namibian Propaganda poster-3.webp"], { visualWeight: "heavy", dominantColor: "brown" }),
-  proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster.webp"], { visualWeight: "light", dominantColor: "blue", featured: true }),
+  proj("p39", "FOOTBALL GRAPHICS",  "Nico Paz Football graphic Poster", "Argentina FA", "A graphic poster for Nico Paz Spanish born footballer player and choosed Argentina to represent.", ["/Images/Nico-Paz-poster-2.webp"], { visualWeight: "heavy", dominantColor: "gray", featured: true }),
   proj("p40", "UI/UX DESIGN",  "Green Hydrogen Analytics Post Analysis", "Green Hydrogen Analytics Post", "A poster for analyzing a post about green hydrogen.", ["/Images/Green Hydrogen UIUX Design.webp"], { visualWeight: "light", dominantColor: "green", featured: true }),
   proj("p41", "ANIME GRAPHICS",  "Drian Poster ", "Burning effect", "A poster for Drian from the Korean manhwa` burning effect.", ["/Images/Drian Poster.webp"], { visualWeight: "heavy", dominantColor: "black", featured: true }),
    proj("p42", "BRANDING",  "Datalani Technology Logo ", "Datalani Technology", "A logo design for Datalani Technology.", ["/Images/FessyNam Logo.webp"], { visualWeight: "heavy", dominantColor: "blue", featured: true }),
     proj("p43", "UI/UX DESIGN",  "Erastus Shindinge Portfolio Home Page 2024 Design", "Erastus Shindinge", "A portfolio design for Erastus Shindinge portfolio 2024.", ["/Images/Erastus 2024 Portfolio.webp"], { visualWeight: "heavy", dominantColor: "black", featured: true }),
      proj("p44", "UI/UX DESIGN",  "Urban Sweep Route Management Page Design ", "Urban Sweep", "A design for Urban Sweep route management page.", ["/Images/Urban Sweep Route Management page.webp"], { visualWeight: "heavy", dominantColor: "white", featured: true }),
+      proj("p45", "PHOTO MANIPLATION",  "EYES SKY", "Photo Manipulation", "A design for a photo manipulation piece eyes in the sky before AI.", ["/Images/eyes sky compressed-2.webp"], { visualWeight: "heavy", dominantColor: "purpule", featured: true }),
+       proj("p46", "PHOTO MANIPLATION",  "Erastus Glass window rain ", "Photo Manipulation", "A design for a photo manipulation for erastus before AI.", ["/Images/Erasy photo manipulation-2.webp"], { visualWeight: "heavy", dominantColor: "black", featured: true }),
+       proj("p47",  "ANIME GRAPHICS",     "Sin Jin Woo Poster 2", "Solo Leveling", "A graphic poster for Sin Jin Woo from the Korean manhwa Solo Levelin.", ["/Images/Sun jin woo poster 2-Smaller size.webp"], { visualWeight: "heavy", dominantColor: "purple" }),
+     
 ];
 
 // ─── Smart Curated Ordering ────────────────────────────────────────────────────
