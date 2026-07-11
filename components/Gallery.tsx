@@ -462,17 +462,20 @@ export default function Gallery({ projects = DEFAULT_PROJECTS }: Props) {
                 {selectedCats.size === 0 && <span className={styles.dropCheck}>✓</span>}
               </button>
               <div className={styles.dropDivider} />
-              {CATEGORY_LIST.map((cat) => (
-                <button
-                  key={cat}
-                  className={`${styles.dropItem} ${selectedCats.has(cat) ? styles.dropItemActive : ""}`}
-                  onClick={() => toggleCategory(cat)}
-                >
-                  <span className={styles.dropIcon}>{CATEGORY_ICONS[cat]}</span>
-                  {cat}
-                  {selectedCats.has(cat) && <span className={styles.dropCheck}>✓</span>}
-                </button>
-              ))}
+             {CATEGORY_LIST.map((cat) => (
+  <button
+    key={cat}
+    className={`${styles.dropItem} ${selectedCats.has(cat) ? styles.dropItemActive : ""}`}
+    onClick={() => {
+      toggleCategory(cat);
+      setDropOpen(false);
+    }}
+  >
+    <span className={styles.dropIcon}>{CATEGORY_ICONS[cat]}</span>
+    {cat}
+    {selectedCats.has(cat) && <span className={styles.dropCheck}>✓</span>}
+  </button>
+))}
             </div>
           )}
         </div>

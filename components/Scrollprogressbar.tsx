@@ -110,7 +110,7 @@ export default function ScrollProgressBar({
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
         style={{
           position: "fixed",
-          top: height + 10,
+          top: `calc(var(--navbar-bottom, ${height + 10}px) + 10px)`,
           right: "1.25rem",
           zIndex,
           pointerEvents: "none",

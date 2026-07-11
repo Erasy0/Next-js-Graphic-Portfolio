@@ -17,10 +17,8 @@
   min-height: 100vh;
   /* Comfortable vertical padding — reduces on mobile */
   padding: 9rem 1rem 0.5rem;
-  background: #000000;
-  background-image: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(255,255,255,0.03) 0%, transparent 70%);
   box-sizing: border-box;
-  overflow-x: hidden;
+  overflow-x: visible;
 }
 
 /* ─── Top Bar ────────────────────────────────────────────────────────────────── */
@@ -940,6 +938,29 @@
    RESPONSIVE BREAKPOINTS
 ══════════════════════════════════════════════════════════════════════════════ */
 
+/* ─── Mobile tap affordance for category button ─── */
+@media (hover: none) {
+  .catBtn:not(.catBtnOpen) {
+    animation: catBtnPulse 2s ease-out infinite;
+  }
+  .catBtnChevron {
+    animation: chevronBounce 1.8s ease-in-out infinite;
+  }
+}
+
+@keyframes catBtnPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.45); transform: scale(1); }
+  60%  { box-shadow: 0 0 0 14px rgba(255, 255, 255, 0); transform: scale(1.04); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); transform: scale(1); }
+}
+
+@keyframes chevronBounce {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(2px); }
+}
+
+
+
 /* ── Large tablet / small desktop ─── */
 @media (max-width: 1024px) {
   .modalImg      { max-height: 58vh; }
@@ -982,8 +1003,8 @@
 
 /* ── Mobile landscape / large phone ─── */
 @media (max-width: 640px) {
-  .gallerySection { padding: 0.5rem 0.5rem 0.5rem; }
-
+  .gallerySection { padding: 0.2rem 0.5rem 0.5rem; }   
+  .topBar { margin-bottom: 2.5rem; } 
   /* Category button: hide text label, show icon + badge only */
   .catBtnLabel { display: none; }
   .catBtn {
@@ -991,6 +1012,7 @@
     gap: 0.35rem;
     font-size: 0.65rem;
   }
+  .stage { margin-top: 0.75rem; }
   .catBtnIcon  { font-size: 0.85rem; }
 
   /* Work counter compact */
@@ -1068,9 +1090,9 @@
 
 /* ── Small phone ─── */
 @media (max-width: 480px) {
-  .gallerySection { padding: 0.5rem 0.25rem 0.5rem; }
+  .gallerySection { padding: 0.2rem 0.25rem 0.5rem; } 
 
-  .topBar { margin-bottom: 0.5rem; }
+ .topBar { margin-bottom: 2.5rem; }    
 
   .catBtn { padding: 0.4rem 0.65rem; }
 
